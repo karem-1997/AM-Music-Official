@@ -511,9 +511,24 @@ function loadFromLocal(key) {
 }
 
 function initFirebase() {
+    // STEP 1: Always load from localStorage first (fast, works offline)
+    var localData = loadFromLocal('siteData');
+    if(localData) {
+        console.log('Loaded from localStorage');
+        applyMainData(localData);
+        updateAdminFields(localData);
+    }
+    var localDyn = loadFromLocal('dynamicTexts');
+    if(localDyn) {
+        dynamicTexts = localDyn;
+        renderDynamicTexts();
+        renderDynamicTextsOnPage();
+    }
+
+    // STEP 2: If Firebase is available, sync with cloud (but don't overwrite local if cloud is empty)
     if(!db) {
-        console.log('Firebase DB not available, using localStorage');
-        loadFromLocalStorage();
+        console.log('Firebase not available, using localStorage only');
+        isFirebaseReady = true;
         return;
     }
 
@@ -521,48 +536,56 @@ function initFirebase() {
         .then(function(doc) {
             if (doc.exists) {
                 var data = doc.data();
-                applyMainData(data);
-                updateAdminFields(data);
-                saveToLocal('siteData', data);
+                // Only apply Firebase data if it has been updated more recently
+                // For now, merge: Firebase data takes precedence for existing fields
+                var merged = localData ? Object.assign({}, localData, data) : data;
+                applyMainData(merged);
+                updateAdminFields(merged);
+                saveToLocal('siteData', merged);
+                console.log('Synced with Firebase');
             } else {
-                var localData = loadFromLocal('siteData');
+                // Document doesn't exist in Firebase, save local data to Firebase
                 if(localData) {
-                    applyMainData(localData);
-                    updateAdminFields(localData);
+                    db.collection('siteData').doc('main').set(localData)
+                        .then(function() { console.log('Saved local data to Firebase'); })
+                        .catch(function(e) { console.error('Failed to save to Firebase:', e); });
                 }
             }
             isFirebaseReady = true;
         })
         .catch(function(err) { 
             console.error('Firebase load error:', err); 
-            var localData = loadFromLocal('siteData');
-            if(localData) {
-                applyMainData(localData);
-                updateAdminFields(localData);
-            }
             isFirebaseReady = true;
         });
 
     db.collection('dynamicTexts').orderBy('createdAt', 'desc').get()
         .then(function(snapshot) {
-            dynamicTexts = [];
+            var firebaseTexts = [];
             snapshot.forEach(function(doc) { 
                 var d = doc.data();
                 d.id = doc.id;
-                dynamicTexts.push(d); 
+                firebaseTexts.push(d); 
             });
-            renderDynamicTexts();
-            renderDynamicTextsOnPage();
-            saveToLocal('dynamicTexts', dynamicTexts);
+            if(firebaseTexts.length > 0) {
+                dynamicTexts = firebaseTexts;
+                renderDynamicTexts();
+                renderDynamicTextsOnPage();
+                saveToLocal('dynamicTexts', dynamicTexts);
+            } else if(localDyn && localDyn.length > 0) {
+                // Save local dynamic texts to Firebase
+                localDyn.forEach(function(t) {
+                    if(t.id && t.id.startsWith('local_')) {
+                        db.collection('dynamicTexts').add({
+                            title: t.title,
+                            content: t.content,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                });
+            }
         })
         .catch(function(err) { 
             console.error('Dynamic texts load error:', err);
-            var localDyn = loadFromLocal('dynamicTexts');
-            if(localDyn) {
-                dynamicTexts = localDyn;
-                renderDynamicTexts();
-                renderDynamicTextsOnPage();
-            }
         });
 }
 
