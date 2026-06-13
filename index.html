@@ -1,865 +1,1366 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>AM Music Official | فنان موسيقي مستقل</title>
-<meta name="description" content="AM Music Official - عالمك الموسيقي الخاص. كتابة وتسجيل أغاني بأسماء الأشخاص والمناسبات الخاصة.">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-:root{--gold:#FFD700;--gold-light:#FFF4B8;--gold-dark:#B8860B;--neon-pink:#FF00FF;--neon-cyan:#00FFFF;--neon-purple:#8B5CF6;--dark-bg:#0A0A0F;--card-bg:rgba(255,255,255,0.03);--border-glow:rgba(255,215,0,0.3)}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Cairo','Tajawal',sans-serif;background:var(--dark-bg);min-height:100vh;overflow-x:hidden;color:#fff;position:relative}
-.loader-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark-bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s ease,visibility 0.8s ease}
-.loader-overlay.hidden{opacity:0;visibility:hidden}
-.loader-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--neon-pink),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:logoPulse 2s ease-in-out infinite;margin-bottom:20px}
-.loader-bar{width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;position:relative}
-.loader-progress{position:absolute;top:0;right:0;height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--neon-pink));border-radius:3px;animation:loadProgress 2s ease-in-out forwards}
-.loader-text{margin-top:15px;font-size:0.85rem;color:rgba(255,255,255,0.5);letter-spacing:3px}
-@keyframes logoPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.05);filter:brightness(1.3)}}
-@keyframes loadProgress{0%{width:0%}100%{width:100%}}
-.bg-container{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden}
-.bg-gradient{position:absolute;width:100%;height:100%;background:radial-gradient(ellipse at 20% 50%,rgba(139,92,246,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(255,0,255,0.1) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(0,255,255,0.08) 0%,transparent 50%);animation:bgShift 15s ease-in-out infinite}
-.bg-grid{position:absolute;width:100%;height:100%;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:50px 50px}
-@keyframes bgShift{0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(2%,-2%)scale(1.02)}66%{transform:translate(-1%,1%)scale(0.98)}}
-.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
-.particle{position:absolute;border-radius:50%;opacity:0;animation:floatParticle linear infinite}
-@keyframes floatParticle{0%{transform:translateY(100vh)translateX(0)scale(0);opacity:0}5%{opacity:0.8}95%{opacity:0.8}100%{transform:translateY(-10vh)translateX(50px)scale(1);opacity:0}}
-.main-container{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 20px 40px;max-width:480px;margin:0 auto}
-.profile-section{text-align:center;margin-bottom:30px;width:100%}
-.avatar-wrapper{position:relative;width:150px;height:150px;margin:0 auto 25px}
-.avatar-glow{position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border-radius:50%;background:conic-gradient(from 0deg,var(--gold),var(--neon-pink),var(--neon-cyan),var(--gold));animation:rotateGlow 4s linear infinite;filter:blur(8px);opacity:0.6}
-.avatar-border{position:absolute;top:-3px;left:-3px;right:-3px;bottom:-3px;border-radius:50%;background:conic-gradient(from 0deg,var(--gold),var(--neon-pink),var(--neon-cyan),var(--gold));animation:rotateGlow 3s linear infinite}
-.avatar{position:relative;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1a0a2e,#0d0520);display:flex;align-items:center;justify-content:center;font-size:55px;color:var(--gold);border:2px solid rgba(255,215,0,0.2);box-shadow:inset 0 0 30px rgba(139,92,246,0.2),0 0 40px rgba(255,215,0,0.1);z-index:1;overflow:hidden}
-.avatar::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,215,0,0.1),transparent);animation:avatarShine 3s linear infinite}
-.avatar i{position:relative;z-index:2;filter:drop-shadow(0 0 10px rgba(255,215,0,0.5))}
-.verified-badge{position:absolute;bottom:8px;right:8px;width:38px;height:38px;background:linear-gradient(135deg,#1da1f2,#0d8bd9);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;border:3px solid var(--dark-bg);box-shadow:0 0 20px rgba(29,161,242,0.5);z-index:3;animation:badgePulse 2s ease-in-out infinite}
-.artist-name{font-size:2.4rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:1px;background:linear-gradient(135deg,#fff,var(--gold-light),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:textShine 3s ease-in-out infinite}
-.artist-username{font-size:1rem;color:rgba(255,255,255,0.5);font-weight:500;margin-bottom:8px;letter-spacing:1px}
-.artist-tag{font-size:0.9rem;color:var(--neon-pink);font-weight:700;text-shadow:0 0 15px rgba(255,0,255,0.4);letter-spacing:2px}
-@keyframes rotateGlow{to{transform:rotate(360deg)}}
-@keyframes avatarShine{0%{transform:translateX(-100%)rotate(45deg)}100%{transform:translateX(100%)rotate(45deg)}}
-@keyframes badgePulse{0%,100%{box-shadow:0 0 20px rgba(29,161,242,0.5)}50%{box-shadow:0 0 30px rgba(29,161,242,0.8)}}
-@keyframes textShine{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
-.equalizer-container{display:flex;align-items:flex-end;justify-content:center;gap:4px;height:35px;margin:20px 0}
-.eq-bar{width:5px;background:linear-gradient(to top,var(--neon-pink),var(--neon-cyan));border-radius:3px;animation:eqBounce ease-in-out infinite}
-.eq-bar:nth-child(1){height:12px;animation-duration:0.8s;animation-delay:0s}
-.eq-bar:nth-child(2){height:22px;animation-duration:0.9s;animation-delay:0.1s}
-.eq-bar:nth-child(3){height:18px;animation-duration:0.7s;animation-delay:0.2s}
-.eq-bar:nth-child(4){height:28px;animation-duration:1s;animation-delay:0.15s}
-.eq-bar:nth-child(5){height:15px;animation-duration:0.85s;animation-delay:0.3s}
-.eq-bar:nth-child(6){height:25px;animation-duration:0.75s;animation-delay:0.05s}
-.eq-bar:nth-child(7){height:20px;animation-duration:0.95s;animation-delay:0.25s}
-.eq-bar:nth-child(8){height:30px;animation-duration:0.8s;animation-delay:0.1s}
-.eq-bar:nth-child(9){height:16px;animation-duration:0.9s;animation-delay:0.35s}
-.eq-bar:nth-child(10){height:24px;animation-duration:0.7s;animation-delay:0.2s}
-.eq-bar:nth-child(11){height:14px;animation-duration:1s;animation-delay:0s}
-.eq-bar:nth-child(12){height:26px;animation-duration:0.85s;animation-delay:0.15s}
-@keyframes eqBounce{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(0.4);opacity:0.7}}
-.card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:28px 24px;margin-bottom:20px;width:100%;position:relative;overflow:hidden;backdrop-filter:blur(20px);transition:transform 0.3s ease,box-shadow 0.3s ease}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-glow),transparent)}
-.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 30px rgba(139,92,246,0.1)}
-.card-title{font-size:1.15rem;font-weight:800;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:10px}
-.card-title i{font-size:1.3rem;animation:iconFloat 2s ease-in-out infinite}
-@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.divider{width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--neon-pink),var(--neon-cyan),transparent);margin:14px auto;border-radius:1px}
-.bio-line{font-size:1rem;color:rgba(255,255,255,0.85);line-height:2;font-weight:500;text-align:center}
-.bio-line .highlight{color:var(--neon-cyan);font-weight:700;text-shadow:0 0 10px rgba(0,255,255,0.3)}
-.services-text{font-size:0.95rem;color:rgba(255,255,255,0.8);line-height:2.2;font-weight:500;text-align:center}
-.services-text .highlight-word{color:var(--gold);font-weight:700;text-shadow:0 0 8px rgba(255,215,0,0.3);position:relative}
-.services-text .highlight-word::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.5}
-.stats-container{display:flex;justify-content:center;gap:0;margin:25px 0;width:100%}
-.stat-box{flex:1;text-align:center;padding:15px 10px;position:relative}
-.stat-box:not(:last-child)::after{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.1),transparent)}
-.stat-icon{font-size:1.8rem;margin-bottom:8px;display:block;animation:statBounce 2s ease-in-out infinite}
-.stat-box:nth-child(2) .stat-icon{animation-delay:0.3s}
-.stat-box:nth-child(3) .stat-icon{animation-delay:0.6s}
-.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:1px}
-@keyframes statBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.buttons-container{display:flex;flex-direction:column;gap:14px;width:100%}
-.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;padding:18px 28px;border-radius:18px;border:none;font-family:'Cairo','Tajawal',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;text-decoration:none;color:#fff;overflow:hidden;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:0 4px 20px rgba(0,0,0,0.3);letter-spacing:0.5px}
-.btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);transition:left 0.6s ease}
-.btn:hover::before{left:100%}
-.btn:hover{transform:translateY(-3px) scale(1.02)}
-.btn:active{transform:scale(0.97)}
-.btn-youtube{background:linear-gradient(135deg,#FF0000,#CC0000);box-shadow:0 6px 25px rgba(255,0,0,0.35)}
-.btn-youtube:hover{box-shadow:0 10px 35px rgba(255,0,0,0.5)}
-.btn-tiktok{background:linear-gradient(135deg,#FF0050,#00F2EA);box-shadow:0 6px 25px rgba(255,0,80,0.35)}
-.btn-tiktok:hover{box-shadow:0 10px 35px rgba(255,0,80,0.5)}
-.btn-whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 6px 25px rgba(37,211,102,0.35)}
-.btn-whatsapp:hover{box-shadow:0 10px 35px rgba(37,211,102,0.5)}
-.btn-icon-main{font-size:1.5rem}
-.btn-icon-arrow{font-size:0.85rem;opacity:0.7;transition:transform 0.3s ease}
-.btn:hover .btn-icon-arrow{transform:translateX(-4px)}
-.footer{margin-top:35px;text-align:center;padding-top:20px;border-top:1px solid rgba(255,255,255,0.05);width:100%}
-.footer-text{font-size:0.8rem;color:rgba(255,255,255,0.35);letter-spacing:1px}
-.footer-heart{color:var(--neon-pink);animation:heartbeat 1.5s ease-in-out infinite;display:inline-block}
-@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.3)}70%{transform:scale(1)}}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
-.reveal.active{opacity:1;transform:translateY(0)}
-@media(max-width:400px){.artist-name{font-size:2rem}.avatar-wrapper{width:130px;height:130px}.btn{padding:16px 22px;font-size:0.95rem}.card{padding:22px 18px}}
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.3);transform:scale(0);animation:rippleAnim 0.6s linear;pointer-events:none}
-@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
-.admin-toggle{position:fixed;top:15px;left:15px;width:48px;height:48px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(255,0,255,0.15));border:1px solid rgba(139,92,246,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--neon-purple);font-size:1.4rem;cursor:pointer;z-index:1000;transition:all 0.3s ease;backdrop-filter:blur(10px);user-select:none;-webkit-tap-highlight-color:transparent;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
-.admin-toggle:hover{transform:scale(1.1);box-shadow:0 0 25px rgba(139,92,246,0.4)}
-.admin-toggle:active{transform:scale(0.95)}
-.password-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1002;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s ease;backdrop-filter:blur(10px)}
-.password-modal.active{opacity:1;visibility:visible}
-.password-box{background:linear-gradient(180deg,#0f0f1a,#1a0a2e);border:1px solid rgba(255,215,0,0.2);border-radius:24px;padding:35px 30px;width:90%;max-width:340px;text-align:center;transform:scale(0.8);transition:transform 0.3s ease;box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(255,215,0,0.1)}
-.password-modal.active .password-box{transform:scale(1)}
-.password-icon{font-size:2.5rem;color:var(--gold);margin-bottom:15px;animation:lockShake 2s ease-in-out infinite}
-@keyframes lockShake{0%,100%{transform:rotate(0)}10%{transform:rotate(-10deg)}20%{transform:rotate(10deg)}30%{transform:rotate(-5deg)}40%{transform:rotate(5deg)}50%{transform:rotate(0)}}
-.password-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:8px}
-.password-subtitle{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:25px}
-.password-input{width:100%;padding:14px 18px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,215,0,0.2);border-radius:14px;color:var(--gold);font-family:'Cairo','Tajawal',sans-serif;font-size:1.3rem;font-weight:700;text-align:center;letter-spacing:8px;outline:none;transition:all 0.3s ease;margin-bottom:20px}
-.password-input:focus{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.2);background:rgba(255,255,255,0.08)}
-.password-input::placeholder{color:rgba(255,255,255,0.2);letter-spacing:4px;font-size:1rem}
-.password-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:14px;color:#000;font-family:'Cairo','Tajawal',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.3s ease}
-.password-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,215,0,0.4)}
-.password-error{color:#ff4444;font-size:0.8rem;margin-top:12px;opacity:0;transition:opacity 0.3s ease;height:20px}
-.password-error.show{opacity:1}
-.password-close{position:absolute;top:20px;right:20px;width:40px;height:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.3s ease}
-.password-close:hover{background:rgba(255,0,0,0.2);color:#ff4444}
-.admin-panel{position:fixed;top:0;left:0;width:100%;max-width:420px;height:100vh;background:linear-gradient(180deg,#0f0f1a 0%,#1a0a2e 100%);z-index:1001;transform:translateX(-100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;border-right:1px solid rgba(255,255,255,0.08);box-shadow:10px 0 40px rgba(0,0,0,0.5)}
-.admin-panel.open{transform:translateX(0)}
-.admin-header{padding:25px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:linear-gradient(180deg,#0f0f1a 0%,#0f0f1a 90%,transparent 100%);z-index:10}
-.admin-title{font-size:1.1rem;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:10px}
-.admin-close{width:36px;height:36px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;transition:all 0.3s ease}
-.admin-close:hover{background:rgba(255,0,0,0.2);color:#ff4444;border-color:rgba(255,0,0,0.3)}
-.admin-body{padding:20px}
-.admin-section{margin-bottom:25px}
-.admin-section-title{font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:15px;display:flex;align-items:center;gap:8px}
-.admin-section-title i{color:var(--neon-cyan)}
-.admin-field{margin-bottom:16px}
-.admin-field label{display:block;font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:6px;font-weight:600}
-.admin-field input,.admin-field textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:#fff;font-family:'Cairo','Tajawal',sans-serif;font-size:0.9rem;transition:all 0.3s ease;outline:none}
-.admin-field input:focus,.admin-field textarea:focus{border-color:var(--neon-purple);box-shadow:0 0 15px rgba(139,92,246,0.2);background:rgba(255,255,255,0.06)}
-.admin-field textarea{min-height:80px;resize:vertical;line-height:1.8}
-.admin-btn{width:100%;padding:14px;border:none;border-radius:12px;font-family:'Cairo','Tajawal',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center;gap:8px}
-.admin-btn-primary{background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));color:#fff;box-shadow:0 4px 20px rgba(139,92,246,0.3)}
-.admin-btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(139,92,246,0.5)}
-.admin-btn-success{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;box-shadow:0 4px 20px rgba(37,211,102,0.3)}
-.admin-btn-success:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(37,211,102,0.5)}
-.admin-btn-danger{background:linear-gradient(135deg,#ff4444,#cc0000);color:#fff;box-shadow:0 4px 20px rgba(255,68,68,0.3)}
-.admin-btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(255,68,68,0.5)}
-.admin-btn-secondary{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
-.admin-btn-secondary:hover{background:rgba(255,255,255,0.1);color:#fff}
-.admin-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;opacity:0;visibility:hidden;transition:all 0.3s ease;backdrop-filter:blur(5px)}
-.admin-overlay.active{opacity:1;visibility:visible}
-.dynamic-texts-list{margin-top:15px}
-.dynamic-text-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px;transition:all 0.3s ease}
-.dynamic-text-item:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)}
-.dynamic-text-content{flex:1;font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.6}
-.dynamic-text-actions{display:flex;gap:6px}
-.dynamic-text-actions button{width:28px;height:28px;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;transition:all 0.2s ease}
-.btn-edit-item{background:rgba(255,215,0,0.15);color:var(--gold)}
-.btn-edit-item:hover{background:rgba(255,215,0,0.3)}
-.btn-delete-item{background:rgba(255,0,0,0.15);color:#ff4444}
-.btn-delete-item:hover{background:rgba(255,0,0,0.3)}
-.admin-tabs{display:flex;gap:8px;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,0.06)}
-.admin-tab{padding:8px 16px;border-radius:10px;border:none;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);font-family:'Cairo','Tajawal',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.3s ease}
-.admin-tab.active{background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));color:#fff}
-.admin-tab:hover:not(.active){background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8)}
-.admin-tab-content{display:none}
-.admin-tab-content.active{display:block}
-.empty-state{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.3)}
-.empty-state i{font-size:2rem;margin-bottom:10px;display:block}
-.empty-state p{font-size:0.85rem}
-.btn-group{display:flex;gap:10px;margin-top:15px}
-.btn-group .admin-btn{flex:1}
-.success-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;padding:14px 28px;border-radius:14px;font-weight:700;font-size:0.9rem;z-index:1003;opacity:0;transition:all 0.4s ease;box-shadow:0 10px 30px rgba(37,211,102,0.4);display:flex;align-items:center;gap:10px}
-.success-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM Music Official 🎵</title>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700;900&display=swap');
+
+        :root { 
+            --gold: #ffb703; 
+            --neon: #ff006e;
+            --cyan: #00f5ff;
+            --purple: #8338ec;
+            --glass: rgba(255, 255, 255, 0.08); 
+        } 
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            margin: 0; 
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #0a0a0a 100%);
+            background-attachment: fixed;
+            font-family: 'Cairo', sans-serif; 
+            color: #fff; 
+            text-align: center; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+
+        body::before { 
+            content: ""; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,0,110,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(131,56,236,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0,245,255,0.1) 0%, transparent 50%);
+            z-index: -1; 
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,183,3,0.3); }
+            50% { box-shadow: 0 0 40px rgba(255,183,3,0.6), 0 0 60px rgba(255,0,110,0.3); }
+        }
+        @keyframes neonFlicker {
+            0%, 100% { text-shadow: 0 0 10px var(--gold), 0 0 20px var(--neon); }
+            50% { text-shadow: 0 0 20px var(--gold), 0 0 40px var(--neon), 0 0 60px var(--purple); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-100vh) scale(1.5); }
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--gold);
+            border-right-color: var(--neon);
+            animation: rotateGlow 4s linear infinite;
+        }
+
+        .logo-ring:nth-child(2) {
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            border-top-color: var(--cyan);
+            border-left-color: var(--purple);
+            animation: rotateGlow 6s linear infinite reverse;
+        }
+
+        .logo-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 30px rgba(255,183,3,0.5);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        .main-title {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255,183,3,0.5);
+            margin-bottom: 10px;
+            animation: neonFlicker 2s ease-in-out infinite;
+        }
+
+        .sub-title {
+            font-size: 1.2rem;
+            color: #ddd;
+            margin-bottom: 30px;
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: var(--cyan);
+            margin-bottom: 40px;
+            padding: 10px 20px;
+            border: 1px solid rgba(0,245,255,0.3);
+            border-radius: 30px;
+            background: rgba(0,245,255,0.05);
+            animation: fadeInUp 1.2s ease-out 0.5s both;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            animation: fadeInUp 1.2s ease-out 0.7s both;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .btn-youtube {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            border-color: rgba(255,0,0,0.5);
+        }
+        .btn-youtube:hover { box-shadow: 0 0 30px rgba(255,0,0,0.5); }
+
+        .btn-tiktok {
+            background: linear-gradient(135deg, #00f2ea, #ff0050);
+            color: white;
+            border-color: rgba(0,242,234,0.5);
+        }
+        .btn-tiktok:hover { box-shadow: 0 0 30px rgba(0,242,234,0.5); }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border-color: rgba(37,211,102,0.5);
+        }
+        .btn-whatsapp:hover { box-shadow: 0 0 30px rgba(37,211,102,0.5); }
+
+        .btn-order {
+            background: linear-gradient(135deg, var(--gold), #ff8c00);
+            color: #000;
+            border-color: rgba(255,183,3,0.5);
+            font-size: 1.1rem;
+            padding: 16px 35px;
+            animation: shake 2s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+        }
+        .btn-order:hover { 
+            box-shadow: 0 0 40px rgba(255,183,3,0.6); 
+            animation: none;
+        }
+
+        .services-section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(255,183,3,0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--neon));
+            border-radius: 3px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .service-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.8s ease-out both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,183,3,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .service-card:hover::before { opacity: 1; }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,183,3,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(255,183,3,0.1);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .service-title {
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .service-desc {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .service-price {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: rgba(255,183,3,0.15);
+            border: 1px solid rgba(255,183,3,0.3);
+            border-radius: 20px;
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .about-section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: right;
+            animation: fadeInUp 1s ease-out both;
+            animation-delay: 0.3s;
+        }
+
+        .about-text {
+            font-size: 1rem;
+            color: #ddd;
+            line-height: 2;
+            margin-bottom: 15px;
+        }
+
+        .about-text strong {
+            color: var(--gold);
+        }
+
+        .highlight-box {
+            background: rgba(255,0,110,0.1);
+            border: 1px solid rgba(255,0,110,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .highlight-box p {
+            color: var(--neon);
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .samples-section {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .sample-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .sample-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .sample-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .sample-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .sample-info {
+            padding: 20px;
+            text-align: right;
+        }
+
+        .sample-title {
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .sample-type {
+            color: var(--cyan);
+            font-size: 0.85rem;
+        }
+
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 40px;
+        }
+
+        .footer-text {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .footer-social a {
+            color: var(--gold);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--neon);
+            transform: scale(1.2);
+        }
+
+        .floating-order {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            animation: bounceIn 1s ease-out 1.5s both;
+        }
+
+        .floating-order .btn-order {
+            box-shadow: 0 10px 40px rgba(255,183,3,0.4);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 6s ease-in-out infinite;
+        }
+
+        /* ===== لوحة التحكم ===== */
+        .admin-trigger {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 9998;
+            font-size: 18px;
+            color: var(--gold);
+            transition: all 0.3s ease;
+        }
+        .admin-trigger:hover {
+            background: rgba(255,183,3,0.2);
+            transform: scale(1.1);
+        }
+
+        #admin-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #admin-panel {
+            background: #111;
+            border: 2px solid var(--gold);
+            border-radius: 25px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            text-align: right;
+            position: relative;
+        }
+
+        .admin-title {
+            color: var(--gold);
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,183,3,0.3);
+        }
+
+        .admin-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .admin-section-title {
+            color: var(--cyan);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 10px 12px;
+            margin: 5px 0;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        .admin-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .admin-textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--gold), #ff8c00);
+            color: #000;
+        }
+        .btn-save:hover { box-shadow: 0 0 20px rgba(255,183,3,0.4); }
+
+        .btn-add {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+        .btn-add:hover { box-shadow: 0 0 20px rgba(40,167,69,0.4); }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #dc3545, #ff4d6d);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            width: auto;
+            margin-top: 0;
+        }
+
+        .btn-close {
+            background: #333;
+            color: #fff;
+        }
+        .btn-close:hover { background: #444; }
+
+        .manage-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .manage-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .manage-item-info {
+            flex: 1;
+            text-align: right;
+            margin: 0 10px;
+            font-size: 0.85rem;
+        }
+
+        .manage-item-title {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        .manage-item-sub {
+            color: #888;
+            font-size: 0.75rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .admin-tab {
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #ccc;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .admin-tab.active {
+            background: rgba(255,183,3,0.2);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .admin-pass-input {
+            text-align: center;
+            letter-spacing: 5px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 2rem; }
+            .sub-title { font-size: 1rem; }
+            .social-btn { padding: 12px 20px; font-size: 0.9rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .logo-container { width: 120px; height: 120px; }
+            .logo-img { width: 100px; height: 100px; }
+            #admin-panel { padding: 15px; }
+        }
+    </style>
 </head>
 <body>
 
-<div class="loader-overlay" id="loader">
-    <div class="loader-logo">AM Music</div>
-    <div class="loader-bar"><div class="loader-progress"></div></div>
-    <div class="loader-text">LOADING...</div>
-</div>
+    <!-- زر فتح لوحة التحكم -->
+    <div class="admin-trigger" onclick="openAdmin()" title="لوحة التحكم">⚙️</div>
 
-<div class="bg-container"><div class="bg-gradient"></div><div class="bg-grid"></div></div>
-<div class="particles" id="particles"></div>
+    <!-- جسيمات متحركة -->
+    <div class="particles" id="particles"></div>
 
-<div class="admin-toggle" id="adminToggle" title="لوحة التحكم"><i class="fas fa-cog"></i></div>
-
-<div class="password-modal" id="passwordModal">
-    <div class="password-close" onclick="closePasswordModal()"><i class="fas fa-times"></i></div>
-    <div class="password-box">
-        <div class="password-icon"><i class="fas fa-lock"></i></div>
-        <div class="password-title">لوحة التحكم</div>
-        <div class="password-subtitle">أدخل كلمة المرور للدخول</div>
-        <input type="password" class="password-input" id="passwordInput" placeholder="&#8226;&#8226;&#8226;&#8226;" maxlength="4" onkeydown="if(event.key==='Enter')checkPassword()">
-        <button class="password-btn" id="passwordBtn" onclick="checkPassword()"><i class="fas fa-unlock-alt"></i> فتح</button>
-        <div class="password-error" id="passwordError">كلمة المرور غير صحيحة!</div>
-    </div>
-</div>
-
-<div class="admin-overlay" id="adminOverlay" onclick="toggleAdminPanel()"></div>
-
-<div class="admin-panel" id="adminPanel">
-    <div class="admin-header">
-        <div class="admin-title"><i class="fas fa-sliders-h"></i> لوحة التحكم</div>
-        <div class="admin-close" onclick="toggleAdminPanel()"><i class="fas fa-times"></i></div>
-    </div>
-    <div class="admin-body">
-        <div class="admin-tabs">
-            <button class="admin-tab active" onclick="switchTab('texts')" data-tab="texts">النصوص</button>
-            <button class="admin-tab" onclick="switchTab('dynamic')" data-tab="dynamic">نصوص جديدة</button>
-            <button class="admin-tab" onclick="switchTab('links')" data-tab="links">الروابط</button>
+    <!-- الهيدر الرئيسي -->
+    <section class="hero-section">
+        <div class="logo-container">
+            <div class="logo-ring"></div>
+            <div class="logo-ring"></div>
+            <img class="logo-img" id="hero-logo" src="https://via.placeholder.com/150/ffb703/000?text=AM" alt="AM Music">
         </div>
 
-        <div class="admin-tab-content active" id="tab-texts">
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-heading"></i> عنوان الصفحة</div>
-                <div class="admin-field"><label>عنوان الصفحة (Title)</label><input type="text" id="editPageTitle" value="AM Music Official | فنان موسيقي مستقل"></div>
-                <div class="admin-field"><label>وصف الصفحة (Meta Description)</label><textarea id="editPageDesc">AM Music Official - عالمك الموسيقي الخاص. كتابة وتسجيل أغاني بأسماء الأشخاص والمناسبات الخاصة.</textarea></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-user"></i> معلومات الفنان</div>
-                <div class="admin-field"><label>اسم الفنان</label><input type="text" id="editArtistName" value="AM Music Official"></div>
-                <div class="admin-field"><label>اسم المستخدم</label><input type="text" id="editArtistUsername" value="@ammusicofficial"></div>
-                <div class="admin-field"><label>الوصف / التاق</label><input type="text" id="editArtistTag" value="فنان موسيقي مستقل"></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-id-card"></i> عنوان كرت السيرة</div>
-                <div class="admin-field"><label>عنوان الكرت</label><input type="text" id="editBioCardTitle" value="من أنا"></div>
-                <div class="admin-field"><label>أيقونة الكرت</label><input type="text" id="editBioCardIcon" value="fas fa-user-circle"></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-align-right"></i> السيرة الذاتية</div>
-                <div class="admin-field"><label>النص الأول</label><textarea id="editBio1">مرحباً! أنا AM Music، فنان موسيقي مستقل</textarea></div>
-                <div class="admin-field"><label>النص الثاني</label><textarea id="editBio2">أكتب وأسجل أغاني بأسماء الأشخاص والمناسبات الخاصة</textarea></div>
-                <div class="admin-field"><label>النص الثالث</label><textarea id="editBio3">عالمك الموسيقي الخاص يبدأ من هنا</textarea></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-concierge-bell"></i> عنوان كرت الخدمات</div>
-                <div class="admin-field"><label>عنوان الكرت</label><input type="text" id="editServicesCardTitle" value="خدماتي"></div>
-                <div class="admin-field"><label>أيقونة الكرت</label><input type="text" id="editServicesCardIcon" value="fas fa-star"></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-list"></i> نص الخدمات</div>
-                <div class="admin-field"><label>نص الخدمات (كل سطر = سطر جديد)</label><textarea id="editServices">نقدم خدمات كتابة الأغاني وتسجيلها بأعلى جودة
-مع إمكانية تخصيص الأغنية باسم الشخص أو المناسبة
-تسليم سريع خلال 24 ساعة</textarea></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-chart-bar"></i> الإحصائيات</div>
-                <div class="admin-field"><label>إيموجي/أيقونة 1</label><input type="text" id="editStat1Icon" value="&#127925;"></div>
-                <div class="admin-field"><label>الرقم 1</label><input type="text" id="editStat1Num" value="150+"></div>
-                <div class="admin-field"><label>العنوان 1</label><input type="text" id="editStat1Label" value="أغنية منجزة"></div>
-                <div class="admin-field"><label>إيموجي/أيقونة 2</label><input type="text" id="editStat2Icon" value="&#128522;"></div>
-                <div class="admin-field"><label>الرقم 2</label><input type="text" id="editStat2Num" value="500+"></div>
-                <div class="admin-field"><label>العنوان 2</label><input type="text" id="editStat2Label" value="عميل سعيد"></div>
-                <div class="admin-field"><label>إيموجي/أيقونة 3</label><input type="text" id="editStat3Icon" value="&#9889;"></div>
-                <div class="admin-field"><label>الرقم 3</label><input type="text" id="editStat3Num" value="24h"></div>
-                <div class="admin-field"><label>العنوان 3</label><input type="text" id="editStat3Label" value="تسليم سريع"></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-shoe-prints"></i> تذييل الصفحة</div>
-                <div class="admin-field"><label>نص التذييل</label><input type="text" id="editFooterText" value="صنع بـ &#10084; بواسطة AM Music Official"></div>
-            </div>
-            <button class="admin-btn admin-btn-success" onclick="saveAllChanges()"><i class="fas fa-save"></i> حفظ جميع التغييرات</button>
+        <h1 class="main-title" id="hero-title">AM Music Official</h1>
+        <p class="sub-title" id="hero-subtitle">أغاني مخصصة باسمك | هدايا صوتية | مناسبات</p>
+        <div class="tagline" id="hero-tagline">🎵 كل لحظة تستاهل أغنية تخلدها 🎵</div>
+
+        <div class="social-buttons">
+            <a href="https://www.youtube.com/@AMMusicOfficial-1" target="_blank" class="social-btn btn-youtube" id="link-youtube">
+                <span>▶️</span> يوتيوب
+            </a>
+            <a href="https://www.tiktok.com/@am.music.official?_r=1&_t=ZS-979fndITCS5" target="_blank" class="social-btn btn-tiktok" id="link-tiktok">
+                <span>🎵</span> تيك توك
+            </a>
+            <a href="https://wa.me/966551139663" target="_blank" class="social-btn btn-whatsapp" id="link-whatsapp">
+                <span>💬</span> واتساب
+            </a>
         </div>
 
-        <div class="admin-tab-content" id="tab-dynamic">
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-plus-circle"></i> إضافة نص جديد</div>
-                <div class="admin-field"><label>عنوان النص</label><input type="text" id="newTextTitle" placeholder="مثال: عروض خاصة"></div>
-                <div class="admin-field"><label>محتوى النص</label><textarea id="newTextContent" placeholder="اكتب النص هنا..."></textarea></div>
-                <button class="admin-btn admin-btn-primary" onclick="addDynamicText()"><i class="fas fa-plus"></i> إضافة النص</button>
+        <a href="https://wa.me/966551139663?text=مرحبا%20AM%20Music%20أنا%20عايز%20أطلب%20أغنية%20مخصصة" target="_blank" class="social-btn btn-order" id="hero-order-btn">
+            <span>🔥</span> اطلب أغنيتك الآن
+        </a>
+    </section>
+
+    <!-- قسم الخدمات -->
+    <section class="services-section">
+        <h2 class="section-title" id="services-title">خدماتنا 🎤</h2>
+
+        <div class="services-grid" id="services-grid">
+            <!-- الخدمات هتتحمل من Firebase -->
+        </div>
+    </section>
+
+    <!-- قسم عن المحتوى -->
+    <section class="about-section">
+        <h2 class="section-title" id="about-title">عن AM Music 🎶</h2>
+
+        <div class="about-card" id="about-card">
+            <p class="about-text" id="about-text-1">
+                <strong>AM Music Official</strong> هو مشروع فني متخصص في إنتاج الأغاني المخصصة باسمك. 
+                نحول كل مناسبة في حياتك لأغنية فريدة تحمل اسمك وتعبر عن مشاعرك.
+            </p>
+            <p class="about-text" id="about-text-2">
+                سواء كان <strong>عيد ميلاد، تخرج، زفاف، خطوبة، أو حتى هدية اعتذار</strong> - 
+                نحن هنا نساعدك توصل مشاعرك بأجمل طريقة ممكنة.
+            </p>
+            <p class="about-text" id="about-text-3">
+                كل أغنية بتكون <strong>مكتوبة خصيصاً ليك</strong>، بكلمات من القلب، وإيقاع يحمس، 
+                وجودة صوتية احترافية. هديتك هتكون مميزة وما تتنسى أبداً!
+            </p>
+
+            <div class="highlight-box">
+                <p id="about-highlight">🔥 اطلب الآن وخلّي مناسبتك تتغنّى باسمك! 🔥</p>
             </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fas fa-list"></i> النصوص المضافة</div>
-                <div class="dynamic-texts-list" id="dynamicTextsList">
-                    <div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد نصوص مضافة بعد</p></div>
+        </div>
+    </section>
+
+    <!-- قسم العينات -->
+    <section class="samples-section">
+        <h2 class="section-title" id="samples-title">أعمالنا 🎧</h2>
+
+        <div class="sample-grid" id="samples-grid">
+            <!-- العينات هتتحمل من Firebase -->
+        </div>
+    </section>
+
+    <!-- زر الطلب العائم -->
+    <div class="floating-order">
+        <a href="https://wa.me/966551139663?text=مرحبا%20AM%20Music%20أنا%20عايز%20أطلب%20أغنية%20مخصصة" target="_blank" class="social-btn btn-order" id="floating-order-btn">
+            <span>⚡</span> اطلب أغنيتك الآن
+        </a>
+    </div>
+
+    <!-- الفوتر -->
+    <footer class="footer">
+        <p class="footer-text" id="footer-text-1">AM Music Official - أغاني مخصصة باسمك</p>
+        <p class="footer-text" id="footer-text-2">📞 واتساب: 966551139663+</p>
+        <div class="footer-social">
+            <a href="https://www.youtube.com/@AMMusicOfficial-1" target="_blank" id="footer-youtube">📺</a>
+            <a href="https://www.tiktok.com/@am.music.official?_r=1&_t=ZS-979fndITCS5" target="_blank" id="footer-tiktok">🎵</a>
+            <a href="https://wa.me/966551139663" target="_blank" id="footer-whatsapp">💬</a>
+        </div>
+        <p class="footer-text" style="margin-top: 20px; font-size: 0.8rem;" id="footer-copyright">© 2026 AM Music Official. All Rights Reserved.</p>
+    </footer>
+
+    <!-- ===== لوحة التحكم ===== -->
+    <div id="admin-overlay">
+        <div id="admin-panel">
+            <h2 class="admin-title">⚙️ لوحة التحكم</h2>
+
+            <!-- تسجيل الدخول -->
+            <div id="admin-login" class="admin-section">
+                <p class="admin-section-title">🔐 تسجيل الدخول</p>
+                <input type="password" id="admin-pass" class="admin-input admin-pass-input" placeholder="••••">
+                <button onclick="checkAdminPass()" class="admin-btn btn-save">دخول</button>
+            </div>
+
+            <!-- المحتوى (يظهر بعد الدخول) -->
+            <div id="admin-content" style="display:none;">
+
+                <div class="admin-tabs">
+                    <div class="admin-tab active" onclick="switchTab('tab-texts')">📝 النصوص</div>
+                    <div class="admin-tab" onclick="switchTab('tab-links')">🔗 الروابط</div>
+                    <div class="admin-tab" onclick="switchTab('tab-services')">🎤 الخدمات</div>
+                    <div class="admin-tab" onclick="switchTab('tab-samples')">🎧 العينات</div>
+                    <div class="admin-tab" onclick="switchTab('tab-visuals')">🖼️ الصور</div>
                 </div>
+
+                <!-- تبويب النصوص -->
+                <div id="tab-texts" class="tab-content active">
+                    <div class="admin-section">
+                        <p class="admin-section-title">📝 نصوص الصفحة الرئيسية</p>
+                        <input type="text" id="edit-title" class="admin-input" placeholder="العنوان الرئيسي">
+                        <input type="text" id="edit-subtitle" class="admin-input" placeholder="العنوان الفرعي">
+                        <input type="text" id="edit-tagline" class="admin-input" placeholder="الشعار">
+                        <input type="text" id="edit-order-text" class="admin-input" placeholder="نص زر الطلب">
+                        <button onclick="saveTexts()" class="admin-btn btn-save">💾 حفظ النصوص</button>
+                    </div>
+
+                    <div class="admin-section">
+                        <p class="admin-section-title">📝 نصوص قسم الخدمات</p>
+                        <input type="text" id="edit-services-title" class="admin-input" placeholder="عنوان قسم الخدمات">
+                        <button onclick="saveServicesTitle()" class="admin-btn btn-save">💾 حفظ</button>
+                    </div>
+
+                    <div class="admin-section">
+                        <p class="admin-section-title">📝 نصوص قسم عنا</p>
+                        <input type="text" id="edit-about-title" class="admin-input" placeholder="عنوان قسم عنا">
+                        <textarea id="edit-about-1" class="admin-input admin-textarea" placeholder="الفقرة الأولى"></textarea>
+                        <textarea id="edit-about-2" class="admin-input admin-textarea" placeholder="الفقرة الثانية"></textarea>
+                        <textarea id="edit-about-3" class="admin-input admin-textarea" placeholder="الفقرة الثالثة"></textarea>
+                        <input type="text" id="edit-about-highlight" class="admin-input" placeholder="نص التحفيز">
+                        <button onclick="saveAbout()" class="admin-btn btn-save">💾 حفظ قسم عنا</button>
+                    </div>
+
+                    <div class="admin-section">
+                        <p class="admin-section-title">📝 نصوص الفوتر</p>
+                        <input type="text" id="edit-footer-1" class="admin-input" placeholder="نص الفوتر 1">
+                        <input type="text" id="edit-footer-2" class="admin-input" placeholder="نص الفوتر 2">
+                        <input type="text" id="edit-footer-copy" class="admin-input" placeholder="حقوق النشر">
+                        <button onclick="saveFooter()" class="admin-btn btn-save">💾 حفظ الفوتر</button>
+                    </div>
+                </div>
+
+                <!-- تبويب الروابط -->
+                <div id="tab-links" class="tab-content">
+                    <div class="admin-section">
+                        <p class="admin-section-title">🔗 روابط التواصل</p>
+                        <input type="text" id="edit-link-youtube" class="admin-input" placeholder="رابط يوتيوب">
+                        <input type="text" id="edit-link-tiktok" class="admin-input" placeholder="رابط تيك توك">
+                        <input type="text" id="edit-link-whatsapp" class="admin-input" placeholder="رقم واتساب (مع كود الدولة)">
+                        <input type="text" id="edit-order-msg" class="admin-input" placeholder="رسالة الطلب (URL encoded)">
+                        <button onclick="saveLinks()" class="admin-btn btn-save">💾 حفظ الروابط</button>
+                    </div>
+                </div>
+
+                <!-- تبويب الخدمات -->
+                <div id="tab-services" class="tab-content">
+                    <div class="admin-section">
+                        <p class="admin-section-title">➕ إضافة خدمة جديدة</p>
+                        <input type="text" id="new-srv-icon" class="admin-input" placeholder="الأيقونة (emoji)" value="🎵">
+                        <input type="text" id="new-srv-title" class="admin-input" placeholder="اسم الخدمة">
+                        <textarea id="new-srv-desc" class="admin-input admin-textarea" placeholder="وصف الخدمة"></textarea>
+                        <input type="text" id="new-srv-price" class="admin-input" placeholder="السعر (مثال: ابتداءً من 50 ريال)">
+                        <button onclick="addService()" class="admin-btn btn-add">➕ إضافة خدمة</button>
+                    </div>
+
+                    <div class="admin-section">
+                        <p class="admin-section-title">📋 إدارة الخدمات</p>
+                        <div id="manage-services"></div>
+                    </div>
+                </div>
+
+                <!-- تبويب العينات -->
+                <div id="tab-samples" class="tab-content">
+                    <div class="admin-section">
+                        <p class="admin-section-title">➕ إضافة عينة جديدة</p>
+                        <input type="text" id="new-sample-title" class="admin-input" placeholder="عنوان العينة">
+                        <input type="text" id="new-sample-type" class="admin-input" placeholder="نوع العينة (مثال: عيد ميلاد)">
+                        <input type="file" id="new-sample-img" class="admin-input" accept="image/*">
+                        <button onclick="addSample()" class="admin-btn btn-add">➕ إضافة عينة</button>
+                    </div>
+
+                    <div class="admin-section">
+                        <p class="admin-section-title">📋 إدارة العينات</p>
+                        <div id="manage-samples"></div>
+                    </div>
+                </div>
+
+                <!-- تبويب الصور -->
+                <div id="tab-visuals" class="tab-content">
+                    <div class="admin-section">
+                        <p class="admin-section-title">🖼️ صورة اللوجو</p>
+                        <input type="file" id="edit-logo" class="admin-input" accept="image/*">
+                        <button onclick="saveLogo()" class="admin-btn btn-save">💾 حفظ اللوجو</button>
+                    </div>
+                    <div class="admin-section">
+                        <p class="admin-section-title">🖼️ خلفية الموقع</p>
+                        <input type="file" id="edit-bg" class="admin-input" accept="image/*">
+                        <button onclick="saveBg()" class="admin-btn btn-save">💾 حفظ الخلفية</button>
+                    </div>
+                </div>
+
+                <button onclick="closeAdmin()" class="admin-btn btn-close" style="margin-top:15px;">❌ إغلاق</button>
             </div>
         </div>
-
-        <div class="admin-tab-content" id="tab-links">
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fab fa-youtube"></i> رابط يوتيوب</div>
-                <div class="admin-field"><label>رابط القناة</label><input type="text" id="editLinkYoutube" value="https://youtube.com/@ammusicofficial"></div>
-                <div class="admin-field"><label>نص الزر</label><input type="text" id="editLabelYoutube" value="قناتي على يوتيوب"></div>
-                <div class="admin-field"><label>أيقونة الزر</label><input type="text" id="editIconYoutube" value="fab fa-youtube"></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fab fa-tiktok"></i> رابط تيك توك</div>
-                <div class="admin-field"><label>رابط الحساب</label><input type="text" id="editLinkTiktok" value="https://tiktok.com/@ammusicofficial"></div>
-                <div class="admin-field"><label>نص الزر</label><input type="text" id="editLabelTiktok" value="حسابي على تيك توك"></div>
-                <div class="admin-field"><label>أيقونة الزر</label><input type="text" id="editIconTiktok" value="fab fa-tiktok"></div>
-            </div>
-            <div class="admin-section">
-                <div class="admin-section-title"><i class="fab fa-whatsapp"></i> رابط واتساب</div>
-                <div class="admin-field"><label>رقم الواتساب</label><input type="text" id="editLinkWhatsapp" value="https://wa.me/966500000000"></div>
-                <div class="admin-field"><label>نص الزر</label><input type="text" id="editLabelWhatsapp" value="تواصل عبر واتساب"></div>
-                <div class="admin-field"><label>أيقونة الزر</label><input type="text" id="editIconWhatsapp" value="fab fa-whatsapp"></div>
-            </div>
-            <button class="admin-btn admin-btn-success" onclick="saveAllChanges()"><i class="fas fa-save"></i> حفظ التغييرات</button>
-        </div>
-    </div>
-</div>
-
-<div class="success-toast" id="successToast"><i class="fas fa-check-circle"></i><span>تم الحفظ بنجاح!</span></div>
-
-<div class="main-container">
-    <div class="profile-section reveal">
-        <div class="avatar-wrapper">
-            <div class="avatar-glow"></div>
-            <div class="avatar-border"></div>
-            <div class="avatar"><i class="fas fa-music"></i></div>
-            <div class="verified-badge"><i class="fas fa-check"></i></div>
-        </div>
-        <h1 class="artist-name" id="displayArtistName">AM Music Official</h1>
-        <p class="artist-username" id="displayArtistUsername">@ammusicofficial</p>
-        <p class="artist-tag" id="displayArtistTag">فنان موسيقي مستقل</p>
-        <div class="equalizer-container">
-            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
-            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
-            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
-        </div>
     </div>
 
-    <div class="card reveal">
-        <div class="card-title" id="bioCardTitle"><i class="fas fa-user-circle" id="bioCardIcon"></i><span id="bioCardTitleText">من أنا</span></div>
-        <div class="divider"></div>
-        <div id="bioContainer">
-            <p class="bio-line" id="displayBio1">مرحباً! أنا <span class="highlight">AM Music</span>، فنان موسيقي مستقل</p>
-            <p class="bio-line" id="displayBio2">أكتب وأسجل أغاني <span class="highlight">بأسماء الأشخاص</span> والمناسبات الخاصة</p>
-            <p class="bio-line" id="displayBio3">عالمك الموسيقي الخاص يبدأ من هنا</p>
-        </div>
-    </div>
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyB0r6tsQN4CJ-0ALShJiH0G_IHR0f_Mo5E",
+            authDomain: "amam-965b0.firebaseapp.com",
+            projectId: "amam-965b0",
+            storageBucket: "amam-965b0.firebasestorage.app",
+            messagingSenderId: "900838483690",
+            appId: "1:900838483690:web:4c786786bf6ce15420d993",
+            measurementId: "G-B0J4V7YTDE"
+        };
 
-    <div class="card reveal">
-        <div class="card-title" id="servicesCardTitle"><i class="fas fa-star" id="servicesCardIcon"></i><span id="servicesCardTitleText">خدماتي</span></div>
-        <div class="divider"></div>
-        <div id="servicesContainer">
-            <p class="services-text" id="displayServices">نقدم خدمات <span class="highlight-word">كتابة الأغاني</span> وتسجيلها بأعلى جودة<br>مع إمكانية <span class="highlight-word">تخصيص الأغنية</span> باسم الشخص أو المناسبة<br>تسليم سريع <span class="highlight-word">خلال 24 ساعة</span></p>
-        </div>
-    </div>
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-    <div id="dynamicTextsContainer"></div>
+        const ADMIN_PASSWORD = "am2024";
 
-    <div class="stats-container reveal">
-        <div class="stat-box"><span class="stat-icon" id="displayStat1Icon">&#127925;</span><div class="stat-label" id="displayStat1Num">150+</div><div class="stat-label" id="displayStat1Label">أغنية منجزة</div></div>
-        <div class="stat-box"><span class="stat-icon" id="displayStat2Icon">&#128522;</span><div class="stat-label" id="displayStat2Num">500+</div><div class="stat-label" id="displayStat2Label">عميل سعيد</div></div>
-        <div class="stat-box"><span class="stat-icon" id="displayStat3Icon">&#9889;</span><div class="stat-label" id="displayStat3Num">24h</div><div class="stat-label" id="displayStat3Label">تسليم سريع</div></div>
-    </div>
+        // ==================== تحميل البيانات ====================
 
-    <div class="buttons-container reveal">
-        <a href="https://youtube.com/@ammusicofficial" class="btn btn-youtube" id="btnYoutube" target="_blank" rel="noopener"><i class="fab fa-youtube btn-icon-main" id="iconYoutube"></i><span id="labelYoutube">قناتي على يوتيوب</span><i class="fas fa-arrow-left btn-icon-arrow"></i></a>
-        <a href="https://tiktok.com/@ammusicofficial" class="btn btn-tiktok" id="btnTiktok" target="_blank" rel="noopener"><i class="fab fa-tiktok btn-icon-main" id="iconTiktok"></i><span id="labelTiktok">حسابي على تيك توك</span><i class="fas fa-arrow-left btn-icon-arrow"></i></a>
-        <a href="https://wa.me/966500000000" class="btn btn-whatsapp" id="btnWhatsapp" target="_blank" rel="noopener"><i class="fab fa-whatsapp btn-icon-main" id="iconWhatsapp"></i><span id="labelWhatsapp">تواصل عبر واتساب</span><i class="fas fa-arrow-left btn-icon-arrow"></i></a>
-    </div>
+        // تحميل النصوص
+        db.ref('siteData/texts').on('value', s => {
+            if (s.val()) {
+                const t = s.val();
+                if (t.title) document.getElementById('hero-title').innerText = t.title;
+                if (t.subtitle) document.getElementById('hero-subtitle').innerText = t.subtitle;
+                if (t.tagline) document.getElementById('hero-tagline').innerText = t.tagline;
+                if (t.orderText) {
+                    document.getElementById('hero-order-btn').innerHTML = `<span>🔥</span> ${t.orderText}`;
+                    document.getElementById('floating-order-btn').innerHTML = `<span>⚡</span> ${t.orderText}`;
+                }
+                if (t.servicesTitle) document.getElementById('services-title').innerText = t.servicesTitle;
+                if (t.aboutTitle) document.getElementById('about-title').innerText = t.aboutTitle;
+                if (t.samplesTitle) document.getElementById('samples-title').innerText = t.samplesTitle;
+            }
+        });
 
-    <div class="footer reveal">
-        <p class="footer-text" id="displayFooterText">صنع بـ <span class="footer-heart">&#10084;</span> بواسطة AM Music Official</p>
-    </div>
-</div>
+        // تحميل نصوص عنا
+        db.ref('siteData/about').on('value', s => {
+            if (s.val()) {
+                const a = s.val();
+                if (a.text1) document.getElementById('about-text-1').innerHTML = a.text1;
+                if (a.text2) document.getElementById('about-text-2').innerHTML = a.text2;
+                if (a.text3) document.getElementById('about-text-3').innerHTML = a.text3;
+                if (a.highlight) document.getElementById('about-highlight').innerText = a.highlight;
+            }
+        });
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+        // تحميل الفوتر
+        db.ref('siteData/footer').on('value', s => {
+            if (s.val()) {
+                const f = s.val();
+                if (f.text1) document.getElementById('footer-text-1').innerText = f.text1;
+                if (f.text2) document.getElementById('footer-text-2').innerText = f.text2;
+                if (f.copyright) document.getElementById('footer-copyright').innerText = f.copyright;
+            }
+        });
 
-<script>
-const firebaseConfig = {
-    apiKey: "AIzaSyB0r6tsQN4CJ-0ALShJiH0G_IHR0f_Mo5E",
-    authDomain: "amam-965b0.firebaseapp.com",
-    projectId: "amam-965b0",
-    storageBucket: "amam-965b0.firebasestorage.app",
-    messagingSenderId: "900838483690",
-    appId: "1:900838483690:web:4c786786bf6ce15420d993",
-    measurementId: "G-B0J4V7YTDE"
-};
-
-var db = null;
-var isFirebaseReady = false;
-var dynamicTexts = [];
-const PASSWORD = '1997';
-
-try {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore();
-    console.log('Firebase initialized');
-} catch(e) {
-    console.error('Firebase init error:', e);
-}
-
-window.addEventListener('load', function() {
-    setTimeout(function() { 
-        var loader = document.getElementById('loader');
-        if(loader) loader.classList.add('hidden'); 
-    }, 2000);
-});
-
-function createParticles() {
-    var container = document.getElementById('particles');
-    if(!container) return;
-    var colors = ['#FFD700', '#FF00FF', '#00FFFF', '#8B5CF6'];
-    for (var i = 0; i < 30; i++) {
-        var p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.animationDuration = (Math.random() * 10 + 10) + 's';
-        p.style.animationDelay = (Math.random() * 10) + 's';
-        container.appendChild(p);
-    }
-}
-createParticles();
-
-function revealOnScroll() {
-    document.querySelectorAll('.reveal').forEach(function(el) {
-        if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
-    });
-}
-window.addEventListener('scroll', revealOnScroll);
-revealOnScroll();
-
-document.querySelectorAll('.btn').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-        var ripple = document.createElement('span');
-        ripple.className = 'ripple';
-        var rect = this.getBoundingClientRect();
-        var size = Math.max(rect.width, rect.height);
-        ripple.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (e.clientX - rect.left - size/2) + 'px;top:' + (e.clientY - rect.top - size/2) + 'px';
-        this.appendChild(ripple);
-        setTimeout(function() { ripple.remove(); }, 600);
-    });
-});
-
-function showPasswordModal() {
-    var modal = document.getElementById('passwordModal');
-    var input = document.getElementById('passwordInput');
-    var error = document.getElementById('passwordError');
-    if(modal) modal.classList.add('active');
-    if(input) { input.value = ''; setTimeout(function() { input.focus(); }, 300); }
-    if(error) error.classList.remove('show');
-}
-
-function closePasswordModal() {
-    var modal = document.getElementById('passwordModal');
-    var input = document.getElementById('passwordInput');
-    var error = document.getElementById('passwordError');
-    if(modal) modal.classList.remove('active');
-    if(input) input.value = '';
-    if(error) error.classList.remove('show');
-}
-
-function checkPassword() {
-    var input = document.getElementById('passwordInput');
-    var error = document.getElementById('passwordError');
-    if(!input) return;
-    if (input.value === PASSWORD) {
-        closePasswordModal();
-        toggleAdminPanel();
-    } else {
-        if(error) error.classList.add('show');
-        input.value = '';
-        setTimeout(function() { input.focus(); }, 100);
-    }
-}
-
-function toggleAdminPanel() {
-    var panel = document.getElementById('adminPanel');
-    var overlay = document.getElementById('adminOverlay');
-    if(panel) panel.classList.toggle('open');
-    if(overlay) overlay.classList.toggle('active');
-}
-
-function switchTab(tabName) {
-    document.querySelectorAll('.admin-tab').forEach(function(t) {
-        t.classList.toggle('active', t.dataset.tab === tabName);
-    });
-    document.querySelectorAll('.admin-tab-content').forEach(function(c) {
-        c.classList.toggle('active', c.id === 'tab-' + tabName);
-    });
-}
-
-function showToast(msg) {
-    var toast = document.getElementById('successToast');
-    if(!toast) return;
-    var span = toast.querySelector('span');
-    if(span) span.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(function() { toast.classList.remove('show'); }, 2500);
-}
-
-function saveToLocal(key, data) {
-    try {
-        localStorage.setItem('ammusic_' + key, JSON.stringify(data));
-        return true;
-    } catch(e) {
-        console.error('LocalStorage error:', e);
-        return false;
-    }
-}
-
-function loadFromLocal(key) {
-    try {
-        var item = localStorage.getItem('ammusic_' + key);
-        return item ? JSON.parse(item) : null;
-    } catch(e) {
-        console.error('LocalStorage read error:', e);
-        return null;
-    }
-}
-
-function initFirebase() {
-    // STEP 1: Always load from localStorage first (fast, works offline)
-    var localData = loadFromLocal('siteData');
-    if(localData) {
-        console.log('Loaded from localStorage');
-        applyMainData(localData);
-        updateAdminFields(localData);
-    }
-    var localDyn = loadFromLocal('dynamicTexts');
-    if(localDyn) {
-        dynamicTexts = localDyn;
-        renderDynamicTexts();
-        renderDynamicTextsOnPage();
-    }
-
-    // STEP 2: If Firebase is available, sync with cloud (but don't overwrite local if cloud is empty)
-    if(!db) {
-        console.log('Firebase not available, using localStorage only');
-        isFirebaseReady = true;
-        return;
-    }
-
-    db.collection('siteData').doc('main').get()
-        .then(function(doc) {
-            if (doc.exists) {
-                var data = doc.data();
-                // Only apply Firebase data if it has been updated more recently
-                // For now, merge: Firebase data takes precedence for existing fields
-                var merged = localData ? Object.assign({}, localData, data) : data;
-                applyMainData(merged);
-                updateAdminFields(merged);
-                saveToLocal('siteData', merged);
-                console.log('Synced with Firebase');
-            } else {
-                // Document doesn't exist in Firebase, save local data to Firebase
-                if(localData) {
-                    db.collection('siteData').doc('main').set(localData)
-                        .then(function() { console.log('Saved local data to Firebase'); })
-                        .catch(function(e) { console.error('Failed to save to Firebase:', e); });
+        // تحميل الروابط
+        db.ref('siteData/links').on('value', s => {
+            if (s.val()) {
+                const l = s.val();
+                if (l.youtube) {
+                    document.getElementById('link-youtube').href = l.youtube;
+                    document.getElementById('footer-youtube').href = l.youtube;
+                }
+                if (l.tiktok) {
+                    document.getElementById('link-tiktok').href = l.tiktok;
+                    document.getElementById('footer-tiktok').href = l.tiktok;
+                }
+                if (l.whatsapp) {
+                    document.getElementById('link-whatsapp').href = `https://wa.me/${l.whatsapp}`;
+                    document.getElementById('footer-whatsapp').href = `https://wa.me/${l.whatsapp}`;
+                    document.getElementById('footer-text-2').innerText = `📞 واتساب: ${l.whatsapp}+`;
+                }
+                if (l.orderMsg) {
+                    document.getElementById('hero-order-btn').href = `https://wa.me/${l.whatsapp || '966551139663'}?text=${l.orderMsg}`;
+                    document.getElementById('floating-order-btn').href = `https://wa.me/${l.whatsapp || '966551139663'}?text=${l.orderMsg}`;
                 }
             }
-            isFirebaseReady = true;
-        })
-        .catch(function(err) { 
-            console.error('Firebase load error:', err); 
-            isFirebaseReady = true;
         });
 
-    db.collection('dynamicTexts').orderBy('createdAt', 'desc').get()
-        .then(function(snapshot) {
-            var firebaseTexts = [];
-            snapshot.forEach(function(doc) { 
-                var d = doc.data();
-                d.id = doc.id;
-                firebaseTexts.push(d); 
+        // تحميل الصور
+        db.ref('siteData/images/logo').on('value', s => {
+            if (s.val()) document.getElementById('hero-logo').src = s.val();
+        });
+        db.ref('siteData/images/bg').on('value', s => {
+            if (s.val()) document.body.style.backgroundImage = `url(${s.val()})`;
+        });
+
+        // تحميل الخدمات
+        function loadServices() {
+            db.ref('services').on('value', s => {
+                const grid = document.getElementById('services-grid');
+                grid.innerHTML = '';
+
+                if (s.val()) {
+                    Object.entries(s.val()).forEach(([key, srv], index) => {
+                        const card = document.createElement('div');
+                        card.className = 'service-card';
+                        card.style.animationDelay = `${index * 0.1}s`;
+                        card.innerHTML = `
+                            <span class="service-icon">${srv.icon || '🎵'}</span>
+                            <h3 class="service-title">${srv.title}</h3>
+                            <p class="service-desc">${srv.desc}</p>
+                            <span class="service-price">${srv.price}</span>
+                        `;
+                        grid.appendChild(card);
+                    });
+                } else {
+                    // بيانات افتراضية
+                    const defaults = [
+                        { icon: '🎂', title: 'أغاني أعياد الميلاد', desc: 'أغنية مخصصة باسم صاحب العيد، مع كلمات تحكي قصته وتحتفل بيومه المميز. هدية صوتية ما تتنسى!', price: 'ابتداءً من 50 ريال' },
+                        { icon: '💍', title: 'أغاني الزفاف والخطوبة', desc: 'أغنية رومانسية باسم العروسين، تخلد لحظة العمر وتكون ذكرى جميلة للأبد. كلمات من القلب للقلب!', price: 'ابتداءً من 80 ريال' },
+                        { icon: '🎓', title: 'أغاني التخرج', desc: 'احتفل بإنجازك بأغنية تحمل اسمك وتخلد سنوات الجهد والتفوق. هدية ليك ولأهلك!', price: 'ابتداءً من 50 ريال' },
+                        { icon: '🏢', title: 'أغاني الشركات والمناسبات', desc: 'أغاني تسويقية وافتتاحية للمحلات، الشركات، والمناسبات الرسمية. احترافية وجودة عالية!', price: 'ابتداءً من 150 ريال' },
+                        { icon: '❤️', title: 'أغاني الاعتذار والحب', desc: 'عايز تعتذر؟ عايز تهدي حبيبتك؟ أغنية مخصصة تحمل مشاعرك الصادقة وتلمس القلوب!', price: 'ابتداءً من 40 ريال' },
+                        { icon: '🎉', title: 'أغاني المناسبات العامة', desc: 'عيد الأم، عيد الأب، رمضان، العيد، أو أي مناسبة خاصة. نحولها لأغنية مميزة باسمك!', price: 'ابتداءً من 40 ريال' },
+                    ];
+                    defaults.forEach((srv, index) => {
+                        db.ref('services').push(srv);
+                    });
+                }
             });
-            if(firebaseTexts.length > 0) {
-                dynamicTexts = firebaseTexts;
-                renderDynamicTexts();
-                renderDynamicTextsOnPage();
-                saveToLocal('dynamicTexts', dynamicTexts);
-            } else if(localDyn && localDyn.length > 0) {
-                // Save local dynamic texts to Firebase
-                localDyn.forEach(function(t) {
-                    if(t.id && t.id.startsWith('local_')) {
-                        db.collection('dynamicTexts').add({
-                            title: t.title,
-                            content: t.content,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
-                });
+        }
+
+        // تحميل العينات
+        function loadSamples() {
+            db.ref('samples').on('value', s => {
+                const grid = document.getElementById('samples-grid');
+                grid.innerHTML = '';
+
+                if (s.val()) {
+                    Object.entries(s.val()).forEach(([key, sample], index) => {
+                        const card = document.createElement('div');
+                        card.className = 'sample-card';
+                        card.style.animationDelay = `${index * 0.1}s`;
+                        card.innerHTML = `
+                            <img class="sample-img" src="${sample.image || 'https://via.placeholder.com/300x180/1a1a1a/ffb703?text=AM+Music'}" alt="${sample.title}">
+                            <div class="sample-info">
+                                <h3 class="sample-title">${sample.title}</h3>
+                                <p class="sample-type">${sample.type || 'أغنية مخصصة'}</p>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                } else {
+                    const defaults = [
+                        { title: 'أغنية عيد ميلاد - أحمد', type: 'عيد ميلاد', image: 'https://via.placeholder.com/300x180/ffb703/000?text=عيد+ميلاد' },
+                        { title: 'أغنية زفاف - محمد & سارة', type: 'زفاف', image: 'https://via.placeholder.com/300x180/ff006e/fff?text=زفاف' },
+                        { title: 'أغنية تخرج - خالد', type: 'تخرج', image: 'https://via.placeholder.com/300x180/00f5ff/000?text=تخرج' },
+                    ];
+                    defaults.forEach(sample => db.ref('samples').push(sample));
+                }
+            });
+        }
+
+        // ==================== لوحة التحكم ====================
+
+        function openAdmin() {
+            document.getElementById('admin-overlay').style.display = 'flex';
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('admin-content').style.display = 'none';
+            document.getElementById('admin-pass').value = '';
+            document.getElementById('admin-pass').focus();
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-overlay').style.display = 'none';
+        }
+
+        function checkAdminPass() {
+            if (document.getElementById('admin-pass').value === ADMIN_PASSWORD) {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                loadAdminData();
+            } else {
+                alert('❌ كلمة السر غلط!');
             }
-        })
-        .catch(function(err) { 
-            console.error('Dynamic texts load error:', err);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function loadAdminData() {
+            // تحميل النصوص في الحقول
+            db.ref('siteData/texts').once('value', s => {
+                if (s.val()) {
+                    const t = s.val();
+                    document.getElementById('edit-title').value = t.title || '';
+                    document.getElementById('edit-subtitle').value = t.subtitle || '';
+                    document.getElementById('edit-tagline').value = t.tagline || '';
+                    document.getElementById('edit-order-text').value = t.orderText || '';
+                    document.getElementById('edit-services-title').value = t.servicesTitle || '';
+                    document.getElementById('edit-about-title').value = t.aboutTitle || '';
+                }
+            });
+
+            db.ref('siteData/about').once('value', s => {
+                if (s.val()) {
+                    const a = s.val();
+                    document.getElementById('edit-about-1').value = a.text1 || '';
+                    document.getElementById('edit-about-2').value = a.text2 || '';
+                    document.getElementById('edit-about-3').value = a.text3 || '';
+                    document.getElementById('edit-about-highlight').value = a.highlight || '';
+                }
+            });
+
+            db.ref('siteData/footer').once('value', s => {
+                if (s.val()) {
+                    const f = s.val();
+                    document.getElementById('edit-footer-1').value = f.text1 || '';
+                    document.getElementById('edit-footer-2').value = f.text2 || '';
+                    document.getElementById('edit-footer-copy').value = f.copyright || '';
+                }
+            });
+
+            db.ref('siteData/links').once('value', s => {
+                if (s.val()) {
+                    const l = s.val();
+                    document.getElementById('edit-link-youtube').value = l.youtube || '';
+                    document.getElementById('edit-link-tiktok').value = l.tiktok || '';
+                    document.getElementById('edit-link-whatsapp').value = l.whatsapp || '';
+                    document.getElementById('edit-order-msg').value = l.orderMsg || '';
+                }
+            });
+
+            loadManageServices();
+            loadManageSamples();
+        }
+
+        // ==================== حفظ البيانات ====================
+
+        async function saveTexts() {
+            await db.ref('siteData/texts').update({
+                title: document.getElementById('edit-title').value,
+                subtitle: document.getElementById('edit-subtitle').value,
+                tagline: document.getElementById('edit-tagline').value,
+                orderText: document.getElementById('edit-order-text').value,
+                servicesTitle: document.getElementById('edit-services-title').value,
+                aboutTitle: document.getElementById('edit-about-title').value,
+                samplesTitle: document.getElementById('samples-title').innerText
+            });
+            alert('✅ تم حفظ النصوص!');
+        }
+
+        async function saveServicesTitle() {
+            await db.ref('siteData/texts').update({
+                servicesTitle: document.getElementById('edit-services-title').value
+            });
+            alert('✅ تم حفظ عنوان الخدمات!');
+        }
+
+        async function saveAbout() {
+            await db.ref('siteData/about').update({
+                text1: document.getElementById('edit-about-1').value,
+                text2: document.getElementById('edit-about-2').value,
+                text3: document.getElementById('edit-about-3').value,
+                highlight: document.getElementById('edit-about-highlight').value
+            });
+            alert('✅ تم حفظ قسم عنا!');
+        }
+
+        async function saveFooter() {
+            await db.ref('siteData/footer').update({
+                text1: document.getElementById('edit-footer-1').value,
+                text2: document.getElementById('edit-footer-2').value,
+                copyright: document.getElementById('edit-footer-copy').value
+            });
+            alert('✅ تم حفظ الفوتر!');
+        }
+
+        async function saveLinks() {
+            await db.ref('siteData/links').update({
+                youtube: document.getElementById('edit-link-youtube').value,
+                tiktok: document.getElementById('edit-link-tiktok').value,
+                whatsapp: document.getElementById('edit-link-whatsapp').value,
+                orderMsg: document.getElementById('edit-order-msg').value
+            });
+            alert('✅ تم حفظ الروابط!');
+        }
+
+        // ==================== الخدمات ====================
+
+        async function addService() {
+            const srv = {
+                icon: document.getElementById('new-srv-icon').value,
+                title: document.getElementById('new-srv-title').value,
+                desc: document.getElementById('new-srv-desc').value,
+                price: document.getElementById('new-srv-price').value
+            };
+            if (!srv.title || !srv.desc) { alert('❌ املأ الاسم والوصف!'); return; }
+            await db.ref('services').push(srv);
+            document.getElementById('new-srv-title').value = '';
+            document.getElementById('new-srv-desc').value = '';
+            document.getElementById('new-srv-price').value = '';
+            loadManageServices();
+            alert('✅ تم إضافة الخدمة!');
+        }
+
+        function loadManageServices() {
+            db.ref('services').once('value', s => {
+                const container = document.getElementById('manage-services');
+                container.innerHTML = '';
+                if (s.val()) {
+                    Object.entries(s.val()).forEach(([key, srv]) => {
+                        const item = document.createElement('div');
+                        item.className = 'manage-item';
+                        item.innerHTML = `
+                            <span style="font-size:1.5rem">${srv.icon || '🎵'}</span>
+                            <div class="manage-item-info">
+                                <div class="manage-item-title">${srv.title}</div>
+                                <div class="manage-item-sub">${srv.price}</div>
+                            </div>
+                            <button class="admin-btn btn-delete" onclick="deleteService('${key}')">🗑️</button>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+            });
+        }
+
+        async function deleteService(key) {
+            if (confirm('حذف الخدمة دي؟')) {
+                await db.ref(`services/${key}`).remove();
+                loadManageServices();
+            }
+        }
+
+        // ==================== العينات ====================
+
+        async function addSample() {
+            const title = document.getElementById('new-sample-title').value;
+            const type = document.getElementById('new-sample-type').value;
+            const file = document.getElementById('new-sample-img').files[0];
+
+            if (!title) { alert('❌ اكتب عنوان العينة!'); return; }
+
+            let imageUrl = 'https://via.placeholder.com/300x180/1a1a1a/ffb703?text=AM+Music';
+            if (file) {
+                imageUrl = await readFile(file);
+            }
+
+            await db.ref('samples').push({ title, type, image: imageUrl });
+            document.getElementById('new-sample-title').value = '';
+            document.getElementById('new-sample-type').value = '';
+            document.getElementById('new-sample-img').value = '';
+            loadManageSamples();
+            alert('✅ تم إضافة العينة!');
+        }
+
+        function loadManageSamples() {
+            db.ref('samples').once('value', s => {
+                const container = document.getElementById('manage-samples');
+                container.innerHTML = '';
+                if (s.val()) {
+                    Object.entries(s.val()).forEach(([key, sample]) => {
+                        const item = document.createElement('div');
+                        item.className = 'manage-item';
+                        item.innerHTML = `
+                            <img src="${sample.image}" alt="${sample.title}">
+                            <div class="manage-item-info">
+                                <div class="manage-item-title">${sample.title}</div>
+                                <div class="manage-item-sub">${sample.type}</div>
+                            </div>
+                            <button class="admin-btn btn-delete" onclick="deleteSample('${key}')">🗑️</button>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+            });
+        }
+
+        async function deleteSample(key) {
+            if (confirm('حذف العينة دي؟')) {
+                await db.ref(`samples/${key}`).remove();
+                loadManageSamples();
+            }
+        }
+
+        // ==================== الصور ====================
+
+        async function saveLogo() {
+            const file = document.getElementById('edit-logo').files[0];
+            if (!file) { alert('❌ اختار صورة!'); return; }
+            const dataUrl = await readFile(file);
+            await db.ref('siteData/images/logo').set(dataUrl);
+            alert('✅ تم حفظ اللوجو!');
+        }
+
+        async function saveBg() {
+            const file = document.getElementById('edit-bg').files[0];
+            if (!file) { alert('❌ اختار صورة!'); return; }
+            const dataUrl = await readFile(file);
+            await db.ref('siteData/images/bg').set(dataUrl);
+            alert('✅ تم حفظ الخلفية!');
+        }
+
+        function readFile(file) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ==================== جسيمات ====================
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particle.style.background = ['#ffb703', '#ff006e', '#00f5ff', '#8338ec'][Math.floor(Math.random() * 4)];
+                container.appendChild(particle);
+            }
+        }
+
+        // ==================== تهيئة ====================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadServices();
+            loadSamples();
+            createParticles();
         });
-}
-
-function loadFromLocalStorage() {
-    var data = loadFromLocal('siteData');
-    if(data) {
-        applyMainData(data);
-        updateAdminFields(data);
-    }
-    var dyn = loadFromLocal('dynamicTexts');
-    if(dyn) {
-        dynamicTexts = dyn;
-        renderDynamicTexts();
-        renderDynamicTextsOnPage();
-    }
-}
-
-function applyMainData(data) {
-    if(!data) return;
-    if (data.pageTitle) document.title = data.pageTitle;
-    if (data.artistName) { var el = document.getElementById('displayArtistName'); if(el) el.textContent = data.artistName; }
-    if (data.artistUsername) { var el = document.getElementById('displayArtistUsername'); if(el) el.textContent = data.artistUsername; }
-    if (data.artistTag) { var el = document.getElementById('displayArtistTag'); if(el) el.textContent = data.artistTag; }
-    if (data.bioCardTitle) { var el = document.getElementById('bioCardTitleText'); if(el) el.textContent = data.bioCardTitle; }
-    if (data.bioCardIcon) { var el = document.getElementById('bioCardIcon'); if(el) el.className = data.bioCardIcon; }
-    if (data.bio1) { var el = document.getElementById('displayBio1'); if(el) el.innerHTML = data.bio1.replace(/\n/g, '<br>'); }
-    if (data.bio2) { var el = document.getElementById('displayBio2'); if(el) el.innerHTML = data.bio2.replace(/\n/g, '<br>'); }
-    if (data.bio3) { var el = document.getElementById('displayBio3'); if(el) el.innerHTML = data.bio3.replace(/\n/g, '<br>'); }
-    if (data.servicesCardTitle) { var el = document.getElementById('servicesCardTitleText'); if(el) el.textContent = data.servicesCardTitle; }
-    if (data.servicesCardIcon) { var el = document.getElementById('servicesCardIcon'); if(el) el.className = data.servicesCardIcon; }
-    if (data.services) { var el = document.getElementById('displayServices'); if(el) el.innerHTML = data.services.replace(/\n/g, '<br>'); }
-    if (data.stat1Icon) { var el = document.getElementById('displayStat1Icon'); if(el) el.innerHTML = data.stat1Icon; }
-    if (data.stat1Num) { var el = document.getElementById('displayStat1Num'); if(el) el.textContent = data.stat1Num; }
-    if (data.stat1Label) { var el = document.getElementById('displayStat1Label'); if(el) el.textContent = data.stat1Label; }
-    if (data.stat2Icon) { var el = document.getElementById('displayStat2Icon'); if(el) el.innerHTML = data.stat2Icon; }
-    if (data.stat2Num) { var el = document.getElementById('displayStat2Num'); if(el) el.textContent = data.stat2Num; }
-    if (data.stat2Label) { var el = document.getElementById('displayStat2Label'); if(el) el.textContent = data.stat2Label; }
-    if (data.stat3Icon) { var el = document.getElementById('displayStat3Icon'); if(el) el.innerHTML = data.stat3Icon; }
-    if (data.stat3Num) { var el = document.getElementById('displayStat3Num'); if(el) el.textContent = data.stat3Num; }
-    if (data.stat3Label) { var el = document.getElementById('displayStat3Label'); if(el) el.textContent = data.stat3Label; }
-    if (data.footerText) { var el = document.getElementById('displayFooterText'); if(el) el.innerHTML = data.footerText; }
-    if (data.linkYoutube) { var el = document.getElementById('btnYoutube'); if(el) el.href = data.linkYoutube; }
-    if (data.labelYoutube) { var el = document.getElementById('labelYoutube'); if(el) el.textContent = data.labelYoutube; }
-    if (data.iconYoutube) { var el = document.getElementById('iconYoutube'); if(el) el.className = data.iconYoutube + ' btn-icon-main'; }
-    if (data.linkTiktok) { var el = document.getElementById('btnTiktok'); if(el) el.href = data.linkTiktok; }
-    if (data.labelTiktok) { var el = document.getElementById('labelTiktok'); if(el) el.textContent = data.labelTiktok; }
-    if (data.iconTiktok) { var el = document.getElementById('iconTiktok'); if(el) el.className = data.iconTiktok + ' btn-icon-main'; }
-    if (data.linkWhatsapp) { var el = document.getElementById('btnWhatsapp'); if(el) el.href = data.linkWhatsapp; }
-    if (data.labelWhatsapp) { var el = document.getElementById('labelWhatsapp'); if(el) el.textContent = data.labelWhatsapp; }
-    if (data.iconWhatsapp) { var el = document.getElementById('iconWhatsapp'); if(el) el.className = data.iconWhatsapp + ' btn-icon-main'; }
-}
-
-function updateAdminFields(data) {
-    if(!data) return;
-    function setVal(id, val) {
-        var el = document.getElementById(id);
-        if(el && val !== undefined) el.value = val;
-    }
-    setVal('editPageTitle', data.pageTitle);
-    setVal('editPageDesc', data.pageDesc);
-    setVal('editArtistName', data.artistName);
-    setVal('editArtistUsername', data.artistUsername);
-    setVal('editArtistTag', data.artistTag);
-    setVal('editBioCardTitle', data.bioCardTitle);
-    setVal('editBioCardIcon', data.bioCardIcon);
-    setVal('editBio1', data.bio1);
-    setVal('editBio2', data.bio2);
-    setVal('editBio3', data.bio3);
-    setVal('editServicesCardTitle', data.servicesCardTitle);
-    setVal('editServicesCardIcon', data.servicesCardIcon);
-    setVal('editServices', data.services);
-    setVal('editStat1Icon', data.stat1Icon);
-    setVal('editStat1Num', data.stat1Num);
-    setVal('editStat1Label', data.stat1Label);
-    setVal('editStat2Icon', data.stat2Icon);
-    setVal('editStat2Num', data.stat2Num);
-    setVal('editStat2Label', data.stat2Label);
-    setVal('editStat3Icon', data.stat3Icon);
-    setVal('editStat3Num', data.stat3Num);
-    setVal('editStat3Label', data.stat3Label);
-    setVal('editFooterText', data.footerText);
-    setVal('editLinkYoutube', data.linkYoutube);
-    setVal('editLabelYoutube', data.labelYoutube);
-    setVal('editIconYoutube', data.iconYoutube);
-    setVal('editLinkTiktok', data.linkTiktok);
-    setVal('editLabelTiktok', data.labelTiktok);
-    setVal('editIconTiktok', data.iconTiktok);
-    setVal('editLinkWhatsapp', data.linkWhatsapp);
-    setVal('editLabelWhatsapp', data.labelWhatsapp);
-    setVal('editIconWhatsapp', data.iconWhatsapp);
-}
-
-function saveAllChanges() {
-    var data = {
-        pageTitle: document.getElementById('editPageTitle').value,
-        pageDesc: document.getElementById('editPageDesc').value,
-        artistName: document.getElementById('editArtistName').value,
-        artistUsername: document.getElementById('editArtistUsername').value,
-        artistTag: document.getElementById('editArtistTag').value,
-        bioCardTitle: document.getElementById('editBioCardTitle').value,
-        bioCardIcon: document.getElementById('editBioCardIcon').value,
-        bio1: document.getElementById('editBio1').value,
-        bio2: document.getElementById('editBio2').value,
-        bio3: document.getElementById('editBio3').value,
-        servicesCardTitle: document.getElementById('editServicesCardTitle').value,
-        servicesCardIcon: document.getElementById('editServicesCardIcon').value,
-        services: document.getElementById('editServices').value,
-        stat1Icon: document.getElementById('editStat1Icon').value,
-        stat1Num: document.getElementById('editStat1Num').value,
-        stat1Label: document.getElementById('editStat1Label').value,
-        stat2Icon: document.getElementById('editStat2Icon').value,
-        stat2Num: document.getElementById('editStat2Num').value,
-        stat2Label: document.getElementById('editStat2Label').value,
-        stat3Icon: document.getElementById('editStat3Icon').value,
-        stat3Num: document.getElementById('editStat3Num').value,
-        stat3Label: document.getElementById('editStat3Label').value,
-        footerText: document.getElementById('editFooterText').value,
-        linkYoutube: document.getElementById('editLinkYoutube').value,
-        labelYoutube: document.getElementById('editLabelYoutube').value,
-        iconYoutube: document.getElementById('editIconYoutube').value,
-        linkTiktok: document.getElementById('editLinkTiktok').value,
-        labelTiktok: document.getElementById('editLabelTiktok').value,
-        iconTiktok: document.getElementById('editIconTiktok').value,
-        linkWhatsapp: document.getElementById('editLinkWhatsapp').value,
-        labelWhatsapp: document.getElementById('editLabelWhatsapp').value,
-        iconWhatsapp: document.getElementById('editIconWhatsapp').value
-    };
-
-    saveToLocal('siteData', data);
-    applyMainData(data);
-
-    if (db && isFirebaseReady) {
-        data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-        db.collection('siteData').doc('main').set(data)
-            .then(function() { showToast('تم الحفظ بنجاح!'); })
-            .catch(function(err) { console.error('Firebase save error:', err); showToast('تم الحفظ محلياً'); });
-    } else {
-        showToast('تم الحفظ محلياً!');
-    }
-}
-
-function addDynamicText() {
-    var title = document.getElementById('newTextTitle').value.trim();
-    var content = document.getElementById('newTextContent').value.trim();
-    if (!title || !content) { showToast('يرجى ملء جميع الحقول'); return; }
-
-    var newText = {
-        id: 'local_' + Date.now(),
-        title: title, 
-        content: content,
-        createdAt: new Date().toISOString()
-    };
-
-    dynamicTexts.unshift(newText);
-    document.getElementById('newTextTitle').value = '';
-    document.getElementById('newTextContent').value = '';
-    renderDynamicTexts(); 
-    renderDynamicTextsOnPage(); 
-    saveToLocal('dynamicTexts', dynamicTexts);
-
-    if (db && isFirebaseReady) {
-        db.collection('dynamicTexts').add({
-            title: title, 
-            content: content,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(function(docRef) {
-            newText.id = docRef.id;
-            saveToLocal('dynamicTexts', dynamicTexts);
-            showToast('تمت الإضافة!');
-        })
-        .catch(function(err) { console.error('Firebase add error:', err); showToast('تمت الإضافة محلياً'); });
-    } else {
-        showToast('تمت الإضافة محلياً!');
-    }
-}
-
-function deleteDynamicText(id) {
-    if(!confirm('هل أنت متأكد من الحذف؟')) return;
-
-    dynamicTexts = dynamicTexts.filter(function(t) { return t.id !== id; });
-    renderDynamicTexts(); 
-    renderDynamicTextsOnPage(); 
-    saveToLocal('dynamicTexts', dynamicTexts);
-
-    if (db && isFirebaseReady && !id.startsWith('local_')) {
-        db.collection('dynamicTexts').doc(id).delete()
-            .then(function() { showToast('تم الحذف!'); })
-            .catch(function(err) { console.error('Delete error:', err); showToast('تم الحذف محلياً'); });
-    } else {
-        showToast('تم الحذف!');
-    }
-}
-
-function editDynamicText(id) {
-    var text = dynamicTexts.find(function(t) { return t.id === id; });
-    if (!text) return;
-    var newTitle = prompt('عنوان النص:', text.title);
-    if (newTitle === null) return;
-    var newContent = prompt('محتوى النص:', text.content);
-    if (newContent === null) return;
-
-    text.title = newTitle.trim() || text.title;
-    text.content = newContent.trim() || text.content;
-    text.updatedAt = new Date().toISOString();
-
-    renderDynamicTexts(); 
-    renderDynamicTextsOnPage(); 
-    saveToLocal('dynamicTexts', dynamicTexts);
-
-    if (db && isFirebaseReady && !id.startsWith('local_')) {
-        db.collection('dynamicTexts').doc(id).update({
-            title: text.title,
-            content: text.content,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(function() { showToast('تم التعديل!'); })
-        .catch(function(err) { console.error('Edit error:', err); showToast('تم التعديل محلياً'); });
-    } else {
-        showToast('تم التعديل!');
-    }
-}
-
-function renderDynamicTexts() {
-    var list = document.getElementById('dynamicTextsList');
-    if(!list) return;
-    if (dynamicTexts.length === 0) {
-        list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد نصوص مضافة بعد</p></div>';
-        return;
-    }
-    list.innerHTML = dynamicTexts.map(function(t) {
-        return '<div class="dynamic-text-item"><div class="dynamic-text-content"><strong style="color:var(--gold);display:block;margin-bottom:4px">' + esc(t.title) + '</strong>' + esc(t.content) + '</div><div class="dynamic-text-actions"><button class="btn-edit-item" onclick="editDynamicText(&#39;' + t.id + '&#39;)" title="تعديل"><i class="fas fa-pen"></i></button><button class="btn-delete-item" onclick="deleteDynamicText(&#39;' + t.id + '&#39;)" title="حذف"><i class="fas fa-trash"></i></button></div></div>';
-    }).join('');
-}
-
-function renderDynamicTextsOnPage() {
-    var container = document.getElementById('dynamicTextsContainer');
-    if(!container) return;
-    if (dynamicTexts.length === 0) { container.innerHTML = ''; return; }
-    container.innerHTML = dynamicTexts.map(function(t) {
-        return '<div class="card reveal active"><div class="card-title"><i class="fas fa-quote-right"></i>' + esc(t.title) + '</div><div class="divider"></div><p class="bio-line">' + esc(t.content).replace(/\n/g, '<br>') + '</p></div>';
-    }).join('');
-}
-
-function esc(text) {
-    if(!text) return '';
-    var d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    initFirebase();
-
-    var adminToggle = document.getElementById('adminToggle');
-    if (adminToggle) {
-        adminToggle.addEventListener('click', function(e) {
-            e.stopPropagation();
-            showPasswordModal();
-        });
-        adminToggle.addEventListener('touchend', function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            showPasswordModal();
-        });
-    }
-
-    var passwordBtn = document.getElementById('passwordBtn');
-    if (passwordBtn) {
-        passwordBtn.addEventListener('click', checkPassword);
-    }
-
-    console.log('AM Music app initialized');
-});
-</script>
+    </script>
 </body>
 </html>
