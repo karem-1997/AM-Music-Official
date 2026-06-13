@@ -1,883 +1,842 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AM Music Official | فنان موسيقي مستقل</title>
-    <meta name="description" content="AM Music Official - عالمك الموسيقي الخاص. كتابة وتسجيل أغاني بأسماء الأشخاص والمناسبات الخاصة.">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --gold: #FFD700;
-            --gold-light: #FFF4B8;
-            --gold-dark: #B8860B;
-            --neon-pink: #FF00FF;
-            --neon-cyan: #00FFFF;
-            --neon-purple: #8B5CF6;
-            --dark-bg: #0A0A0F;
-            --card-bg: rgba(255,255,255,0.03);
-            --border-glow: rgba(255,215,0,0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            background: var(--dark-bg);
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: #fff;
-            position: relative;
-        }
-
-        /* ===== LOADING SCREEN ===== */
-        .loader-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-bg);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        .loader-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-logo {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--gold), var(--neon-pink), var(--neon-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: logoPulse 2s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-
-        .loader-bar {
-            width: 200px;
-            height: 3px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .loader-progress {
-            position: absolute;
-            top: 0;
-            right: 0;
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--gold), var(--neon-pink));
-            border-radius: 3px;
-            animation: loadProgress 2s ease-in-out forwards;
-        }
-
-        .loader-text {
-            margin-top: 15px;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 3px;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.05); filter: brightness(1.3); }
-        }
-
-        @keyframes loadProgress {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        /* ===== BACKGROUND ===== */
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .bg-gradient {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(139,92,246,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 20%, rgba(255,0,255,0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 80%, rgba(0,255,255,0.08) 0%, transparent 50%);
-            animation: bgShift 15s ease-in-out infinite;
-        }
-
-        .bg-grid {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-
-        @keyframes bgShift {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(2%, -2%) scale(1.02); }
-            66% { transform: translate(-1%, 1%) scale(0.98); }
-        }
-
-        /* ===== PARTICLES ===== */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0;
-            animation: floatParticle linear infinite;
-        }
-
-        @keyframes floatParticle {
-            0% { 
-                transform: translateY(100vh) translateX(0) scale(0); 
-                opacity: 0; 
-            }
-            5% { opacity: 0.8; }
-            95% { opacity: 0.8; }
-            100% { 
-                transform: translateY(-10vh) translateX(50px) scale(1); 
-                opacity: 0; 
-            }
-        }
-
-        /* ===== MAIN CONTAINER ===== */
-        .main-container {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px 20px 40px;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        /* ===== PROFILE SECTION ===== */
-        .profile-section {
-            text-align: center;
-            margin-bottom: 30px;
-            width: 100%;
-        }
-
-        .avatar-wrapper {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 25px;
-        }
-
-        .avatar-glow {
-            position: absolute;
-            top: -8px;
-            left: -8px;
-            right: -8px;
-            bottom: -8px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--gold), var(--neon-pink), var(--neon-cyan), var(--gold));
-            animation: rotateGlow 4s linear infinite;
-            filter: blur(8px);
-            opacity: 0.6;
-        }
-
-        .avatar-border {
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--gold), var(--neon-pink), var(--neon-cyan), var(--gold));
-            animation: rotateGlow 3s linear infinite;
-        }
-
-        .avatar {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #1a0a2e, #0d0520);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 55px;
-            color: var(--gold);
-            border: 2px solid rgba(255,215,0,0.2);
-            box-shadow: 
-                inset 0 0 30px rgba(139,92,246,0.2),
-                0 0 40px rgba(255,215,0,0.1);
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .avatar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,215,0,0.1), transparent);
-            animation: avatarShine 3s linear infinite;
-        }
-
-        .avatar i {
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 0 10px rgba(255,215,0,0.5));
-        }
-
-        .verified-badge {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 16px;
-            border: 3px solid var(--dark-bg);
-            box-shadow: 0 0 20px rgba(29,161,242,0.5);
-            z-index: 3;
-            animation: badgePulse 2s ease-in-out infinite;
-        }
-
-        .artist-name {
-            font-size: 2.4rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 6px;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #fff, var(--gold-light), #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: textShine 3s ease-in-out infinite;
-        }
-
-        .artist-username {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.5);
-            font-weight: 500;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
-        }
-
-        .artist-tag {
-            font-size: 0.9rem;
-            color: var(--neon-pink);
-            font-weight: 700;
-            text-shadow: 0 0 15px rgba(255,0,255,0.4);
-            letter-spacing: 2px;
-        }
-
-        /* ===== EQUALIZER ===== */
-        .equalizer-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 4px;
-            height: 35px;
-            margin: 20px 0;
-        }
-
-        .eq-bar {
-            width: 5px;
-            background: linear-gradient(to top, var(--neon-pink), var(--neon-cyan));
-            border-radius: 3px;
-            animation: eqBounce ease-in-out infinite;
-        }
-
-        .eq-bar:nth-child(1) { height: 12px; animation-duration: 0.8s; animation-delay: 0s; }
-        .eq-bar:nth-child(2) { height: 22px; animation-duration: 0.9s; animation-delay: 0.1s; }
-        .eq-bar:nth-child(3) { height: 18px; animation-duration: 0.7s; animation-delay: 0.2s; }
-        .eq-bar:nth-child(4) { height: 28px; animation-duration: 1s; animation-delay: 0.15s; }
-        .eq-bar:nth-child(5) { height: 15px; animation-duration: 0.85s; animation-delay: 0.3s; }
-        .eq-bar:nth-child(6) { height: 25px; animation-duration: 0.75s; animation-delay: 0.05s; }
-        .eq-bar:nth-child(7) { height: 20px; animation-duration: 0.95s; animation-delay: 0.25s; }
-        .eq-bar:nth-child(8) { height: 30px; animation-duration: 0.8s; animation-delay: 0.1s; }
-        .eq-bar:nth-child(9) { height: 16px; animation-duration: 0.9s; animation-delay: 0.35s; }
-        .eq-bar:nth-child(10) { height: 24px; animation-duration: 0.7s; animation-delay: 0.2s; }
-        .eq-bar:nth-child(11) { height: 14px; animation-duration: 1s; animation-delay: 0s; }
-        .eq-bar:nth-child(12) { height: 26px; animation-duration: 0.85s; animation-delay: 0.15s; }
-
-        @keyframes eqBounce {
-            0%, 100% { transform: scaleY(1); opacity: 1; }
-            50% { transform: scaleY(0.4); opacity: 0.7; }
-        }
-
-        /* ===== CARDS ===== */
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 24px;
-            padding: 28px 24px;
-            margin-bottom: 20px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(20px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(139,92,246,0.1);
-        }
-
-        .card-title {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--gold);
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            font-size: 1.3rem;
-            animation: iconFloat 2s ease-in-out infinite;
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .divider {
-            width: 50px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), var(--neon-pink), var(--neon-cyan), transparent);
-            margin: 14px auto;
-            border-radius: 1px;
-        }
-
-        /* ===== BIO SECTION ===== */
-        .bio-line {
-            font-size: 1rem;
-            color: rgba(255,255,255,0.85);
-            line-height: 2;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .bio-line .highlight {
-            color: var(--neon-cyan);
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(0,255,255,0.3);
-        }
-
-        /* ===== SERVICES SECTION ===== */
-        .services-text {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.8);
-            line-height: 2.2;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .services-text .highlight-word {
-            color: var(--gold);
-            font-weight: 700;
-            text-shadow: 0 0 8px rgba(255,215,0,0.3);
-            position: relative;
-        }
-
-        .services-text .highlight-word::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            opacity: 0.5;
-        }
-
-        /* ===== STATS ===== */
-        .stats-container {
-            display: flex;
-            justify-content: center;
-            gap: 0;
-            margin: 25px 0;
-            width: 100%;
-        }
-
-        .stat-box {
-            flex: 1;
-            text-align: center;
-            padding: 15px 10px;
-            position: relative;
-        }
-
-        .stat-box:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 20%;
-            bottom: 20%;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
-        }
-
-        .stat-icon {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-            display: block;
-            animation: statBounce 2s ease-in-out infinite;
-        }
-
-        .stat-box:nth-child(2) .stat-icon { animation-delay: 0.3s; }
-        .stat-box:nth-child(3) .stat-icon { animation-delay: 0.6s; }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.5);
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        @keyframes statBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        /* ===== BUTTONS ===== */
-        .buttons-container {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            width: 100%;
-        }
-
-        .btn {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            padding: 18px 28px;
-            border-radius: 18px;
-            border: none;
-            font-family: 'Cairo', 'Tajawal', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            color: #fff;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            letter-spacing: 0.5px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px) scale(1.02);
-        }
-
-        .btn:active {
-            transform: scale(0.97);
-        }
-
-        .btn-youtube {
-            background: linear-gradient(135deg, #FF0000, #CC0000);
-            box-shadow: 0 6px 25px rgba(255,0,0,0.35);
-        }
-
-        .btn-youtube:hover {
-            box-shadow: 0 10px 35px rgba(255,0,0,0.5);
-        }
-
-        .btn-tiktok {
-            background: linear-gradient(135deg, #FF0050, #00F2EA);
-            box-shadow: 0 6px 25px rgba(255,0,80,0.35);
-        }
-
-        .btn-tiktok:hover {
-            box-shadow: 0 10px 35px rgba(255,0,80,0.5);
-        }
-
-        .btn-whatsapp {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            box-shadow: 0 6px 25px rgba(37,211,102,0.35);
-        }
-
-        .btn-whatsapp:hover {
-            box-shadow: 0 10px 35px rgba(37,211,102,0.5);
-        }
-
-        .btn-icon-main {
-            font-size: 1.5rem;
-        }
-
-        .btn-icon-arrow {
-            font-size: 0.85rem;
-            opacity: 0.7;
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover .btn-icon-arrow {
-            transform: translateX(-4px);
-        }
-
-        /* ===== FOOTER ===== */
-        .footer {
-            margin-top: 35px;
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            width: 100%;
-        }
-
-        .footer-text {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.35);
-            letter-spacing: 1px;
-        }
-
-        .footer-heart {
-            color: var(--neon-pink);
-            animation: heartbeat 1.5s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes rotateGlow {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes avatarShine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
-        }
-
-        @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(29,161,242,0.5); }
-            50% { box-shadow: 0 0 30px rgba(29,161,242,0.8); }
-        }
-
-        @keyframes textShine {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            14% { transform: scale(1.3); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.3); }
-            70% { transform: scale(1); }
-        }
-
-        /* ===== SCROLL ANIMATIONS ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 400px) {
-            .artist-name { font-size: 2rem; }
-            .avatar-wrapper { width: 130px; height: 130px; }
-            .btn { padding: 16px 22px; font-size: 0.95rem; }
-            .card { padding: 22px 18px; }
-        }
-
-        /* ===== RIPPLE EFFECT ===== */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: scale(0);
-            animation: rippleAnim 0.6s linear;
-            pointer-events: none;
-        }
-
-        @keyframes rippleAnim {
-            to { transform: scale(4); opacity: 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AM Music Official | فنان موسيقي مستقل</title>
+<meta name="description" content="AM Music Official - عالمك الموسيقي الخاص. كتابة وتسجيل أغاني بأسماء الأشخاص والمناسبات الخاصة.">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--gold:#FFD700;--gold-light:#FFF4B8;--gold-dark:#B8860B;--neon-pink:#FF00FF;--neon-cyan:#00FFFF;--neon-purple:#8B5CF6;--dark-bg:#0A0A0F;--card-bg:rgba(255,255,255,0.03);--border-glow:rgba(255,215,0,0.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo','Tajawal',sans-serif;background:var(--dark-bg);min-height:100vh;overflow-x:hidden;color:#fff;position:relative}
+.loader-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--dark-bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.8s ease,visibility 0.8s ease}
+.loader-overlay.hidden{opacity:0;visibility:hidden}
+.loader-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--neon-pink),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:logoPulse 2s ease-in-out infinite;margin-bottom:20px}
+.loader-bar{width:200px;height:3px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;position:relative}
+.loader-progress{position:absolute;top:0;right:0;height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--neon-pink));border-radius:3px;animation:loadProgress 2s ease-in-out forwards}
+.loader-text{margin-top:15px;font-size:0.85rem;color:rgba(255,255,255,0.5);letter-spacing:3px}
+@keyframes logoPulse{0%,100%{transform:scale(1);filter:brightness(1)}50%{transform:scale(1.05);filter:brightness(1.3)}}
+@keyframes loadProgress{0%{width:0%}100%{width:100%}}
+.bg-container{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden}
+.bg-gradient{position:absolute;width:100%;height:100%;background:radial-gradient(ellipse at 20% 50%,rgba(139,92,246,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(255,0,255,0.1) 0%,transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(0,255,255,0.08) 0%,transparent 50%);animation:bgShift 15s ease-in-out infinite}
+.bg-grid{position:absolute;width:100%;height:100%;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:50px 50px}
+@keyframes bgShift{0%,100%{transform:translate(0,0)scale(1)}33%{transform:translate(2%,-2%)scale(1.02)}66%{transform:translate(-1%,1%)scale(0.98)}}
+.particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+.particle{position:absolute;border-radius:50%;opacity:0;animation:floatParticle linear infinite}
+@keyframes floatParticle{0%{transform:translateY(100vh)translateX(0)scale(0);opacity:0}5%{opacity:0.8}95%{opacity:0.8}100%{transform:translateY(-10vh)translateX(50px)scale(1);opacity:0}}
+.main-container{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 20px 40px;max-width:480px;margin:0 auto}
+.profile-section{text-align:center;margin-bottom:30px;width:100%}
+.avatar-wrapper{position:relative;width:150px;height:150px;margin:0 auto 25px}
+.avatar-glow{position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border-radius:50%;background:conic-gradient(from 0deg,var(--gold),var(--neon-pink),var(--neon-cyan),var(--gold));animation:rotateGlow 4s linear infinite;filter:blur(8px);opacity:0.6}
+.avatar-border{position:absolute;top:-3px;left:-3px;right:-3px;bottom:-3px;border-radius:50%;background:conic-gradient(from 0deg,var(--gold),var(--neon-pink),var(--neon-cyan),var(--gold));animation:rotateGlow 3s linear infinite}
+.avatar{position:relative;width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#1a0a2e,#0d0520);display:flex;align-items:center;justify-content:center;font-size:55px;color:var(--gold);border:2px solid rgba(255,215,0,0.2);box-shadow:inset 0 0 30px rgba(139,92,246,0.2),0 0 40px rgba(255,215,0,0.1);z-index:1;overflow:hidden}
+.avatar::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,215,0,0.1),transparent);animation:avatarShine 3s linear infinite}
+.avatar i{position:relative;z-index:2;filter:drop-shadow(0 0 10px rgba(255,215,0,0.5))}
+.verified-badge{position:absolute;bottom:8px;right:8px;width:38px;height:38px;background:linear-gradient(135deg,#1da1f2,#0d8bd9);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;border:3px solid var(--dark-bg);box-shadow:0 0 20px rgba(29,161,242,0.5);z-index:3;animation:badgePulse 2s ease-in-out infinite}
+.artist-name{font-size:2.4rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:1px;background:linear-gradient(135deg,#fff,var(--gold-light),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:textShine 3s ease-in-out infinite}
+.artist-username{font-size:1rem;color:rgba(255,255,255,0.5);font-weight:500;margin-bottom:8px;letter-spacing:1px}
+.artist-tag{font-size:0.9rem;color:var(--neon-pink);font-weight:700;text-shadow:0 0 15px rgba(255,0,255,0.4);letter-spacing:2px}
+@keyframes rotateGlow{to{transform:rotate(360deg)}}
+@keyframes avatarShine{0%{transform:translateX(-100%)rotate(45deg)}100%{transform:translateX(100%)rotate(45deg)}}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 20px rgba(29,161,242,0.5)}50%{box-shadow:0 0 30px rgba(29,161,242,0.8)}}
+@keyframes textShine{0%,100%{filter:brightness(1)}50%{filter:brightness(1.2)}}
+.equalizer-container{display:flex;align-items:flex-end;justify-content:center;gap:4px;height:35px;margin:20px 0}
+.eq-bar{width:5px;background:linear-gradient(to top,var(--neon-pink),var(--neon-cyan));border-radius:3px;animation:eqBounce ease-in-out infinite}
+.eq-bar:nth-child(1){height:12px;animation-duration:0.8s;animation-delay:0s}
+.eq-bar:nth-child(2){height:22px;animation-duration:0.9s;animation-delay:0.1s}
+.eq-bar:nth-child(3){height:18px;animation-duration:0.7s;animation-delay:0.2s}
+.eq-bar:nth-child(4){height:28px;animation-duration:1s;animation-delay:0.15s}
+.eq-bar:nth-child(5){height:15px;animation-duration:0.85s;animation-delay:0.3s}
+.eq-bar:nth-child(6){height:25px;animation-duration:0.75s;animation-delay:0.05s}
+.eq-bar:nth-child(7){height:20px;animation-duration:0.95s;animation-delay:0.25s}
+.eq-bar:nth-child(8){height:30px;animation-duration:0.8s;animation-delay:0.1s}
+.eq-bar:nth-child(9){height:16px;animation-duration:0.9s;animation-delay:0.35s}
+.eq-bar:nth-child(10){height:24px;animation-duration:0.7s;animation-delay:0.2s}
+.eq-bar:nth-child(11){height:14px;animation-duration:1s;animation-delay:0s}
+.eq-bar:nth-child(12){height:26px;animation-duration:0.85s;animation-delay:0.15s}
+@keyframes eqBounce{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(0.4);opacity:0.7}}
+.card{background:var(--card-bg);border:1px solid rgba(255,255,255,0.06);border-radius:24px;padding:28px 24px;margin-bottom:20px;width:100%;position:relative;overflow:hidden;backdrop-filter:blur(20px);transition:transform 0.3s ease,box-shadow 0.3s ease}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--border-glow),transparent)}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 30px rgba(139,92,246,0.1)}
+.card-title{font-size:1.15rem;font-weight:800;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:10px}
+.card-title i{font-size:1.3rem;animation:iconFloat 2s ease-in-out infinite}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.divider{width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--neon-pink),var(--neon-cyan),transparent);margin:14px auto;border-radius:1px}
+.bio-line{font-size:1rem;color:rgba(255,255,255,0.85);line-height:2;font-weight:500;text-align:center}
+.bio-line .highlight{color:var(--neon-cyan);font-weight:700;text-shadow:0 0 10px rgba(0,255,255,0.3)}
+.services-text{font-size:0.95rem;color:rgba(255,255,255,0.8);line-height:2.2;font-weight:500;text-align:center}
+.services-text .highlight-word{color:var(--gold);font-weight:700;text-shadow:0 0 8px rgba(255,215,0,0.3);position:relative}
+.services-text .highlight-word::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.5}
+.stats-container{display:flex;justify-content:center;gap:0;margin:25px 0;width:100%}
+.stat-box{flex:1;text-align:center;padding:15px 10px;position:relative}
+.stat-box:not(:last-child)::after{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.1),transparent)}
+.stat-icon{font-size:1.8rem;margin-bottom:8px;display:block;animation:statBounce 2s ease-in-out infinite}
+.stat-box:nth-child(2) .stat-icon{animation-delay:0.3s}
+.stat-box:nth-child(3) .stat-icon{animation-delay:0.6s}
+.stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5);font-weight:600;letter-spacing:1px}
+@keyframes statBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.buttons-container{display:flex;flex-direction:column;gap:14px;width:100%}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;padding:18px 28px;border-radius:18px;border:none;font-family:'Cairo','Tajawal',sans-serif;font-size:1.05rem;font-weight:700;cursor:pointer;text-decoration:none;color:#fff;overflow:hidden;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);box-shadow:0 4px 20px rgba(0,0,0,0.3);letter-spacing:0.5px}
+.btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);transition:left 0.6s ease}
+.btn:hover::before{left:100%}
+.btn:hover{transform:translateY(-3px) scale(1.02)}
+.btn:active{transform:scale(0.97)}
+.btn-youtube{background:linear-gradient(135deg,#FF0000,#CC0000);box-shadow:0 6px 25px rgba(255,0,0,0.35)}
+.btn-youtube:hover{box-shadow:0 10px 35px rgba(255,0,0,0.5)}
+.btn-tiktok{background:linear-gradient(135deg,#FF0050,#00F2EA);box-shadow:0 6px 25px rgba(255,0,80,0.35)}
+.btn-tiktok:hover{box-shadow:0 10px 35px rgba(255,0,80,0.5)}
+.btn-whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 6px 25px rgba(37,211,102,0.35)}
+.btn-whatsapp:hover{box-shadow:0 10px 35px rgba(37,211,102,0.5)}
+.btn-icon-main{font-size:1.5rem}
+.btn-icon-arrow{font-size:0.85rem;opacity:0.7;transition:transform 0.3s ease}
+.btn:hover .btn-icon-arrow{transform:translateX(-4px)}
+.footer{margin-top:35px;text-align:center;padding-top:20px;border-top:1px solid rgba(255,255,255,0.05);width:100%}
+.footer-text{font-size:0.8rem;color:rgba(255,255,255,0.35);letter-spacing:1px}
+.footer-heart{color:var(--neon-pink);animation:heartbeat 1.5s ease-in-out infinite;display:inline-block}
+@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.3)}28%{transform:scale(1)}42%{transform:scale(1.3)}70%{transform:scale(1)}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.active{opacity:1;transform:translateY(0)}
+@media(max-width:400px){.artist-name{font-size:2rem}.avatar-wrapper{width:130px;height:130px}.btn{padding:16px 22px;font-size:0.95rem}.card{padding:22px 18px}}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.3);transform:scale(0);animation:rippleAnim 0.6s linear;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+.admin-toggle{position:fixed;top:15px;left:15px;width:48px;height:48px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(255,0,255,0.15));border:1px solid rgba(139,92,246,0.3);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--neon-purple);font-size:1.4rem;cursor:pointer;z-index:1000;transition:all 0.3s ease;backdrop-filter:blur(10px);user-select:none;-webkit-tap-highlight-color:transparent;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+.admin-toggle:hover{transform:scale(1.1);box-shadow:0 0 25px rgba(139,92,246,0.4)}
+.admin-toggle:active{transform:scale(0.95)}
+.password-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1002;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s ease;backdrop-filter:blur(10px)}
+.password-modal.active{opacity:1;visibility:visible}
+.password-box{background:linear-gradient(180deg,#0f0f1a,#1a0a2e);border:1px solid rgba(255,215,0,0.2);border-radius:24px;padding:35px 30px;width:90%;max-width:340px;text-align:center;transform:scale(0.8);transition:transform 0.3s ease;box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(255,215,0,0.1)}
+.password-modal.active .password-box{transform:scale(1)}
+.password-icon{font-size:2.5rem;color:var(--gold);margin-bottom:15px;animation:lockShake 2s ease-in-out infinite}
+@keyframes lockShake{0%,100%{transform:rotate(0)}10%{transform:rotate(-10deg)}20%{transform:rotate(10deg)}30%{transform:rotate(-5deg)}40%{transform:rotate(5deg)}50%{transform:rotate(0)}}
+.password-title{font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:8px}
+.password-subtitle{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:25px}
+.password-input{width:100%;padding:14px 18px;background:rgba(255,255,255,0.05);border:2px solid rgba(255,215,0,0.2);border-radius:14px;color:var(--gold);font-family:'Cairo','Tajawal',sans-serif;font-size:1.3rem;font-weight:700;text-align:center;letter-spacing:8px;outline:none;transition:all 0.3s ease;margin-bottom:20px}
+.password-input:focus{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.2);background:rgba(255,255,255,0.08)}
+.password-input::placeholder{color:rgba(255,255,255,0.2);letter-spacing:4px;font-size:1rem}
+.password-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border:none;border-radius:14px;color:#000;font-family:'Cairo','Tajawal',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.3s ease}
+.password-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(255,215,0,0.4)}
+.password-error{color:#ff4444;font-size:0.8rem;margin-top:12px;opacity:0;transition:opacity 0.3s ease;height:20px}
+.password-error.show{opacity:1}
+.password-close{position:absolute;top:20px;right:20px;width:40px;height:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.3s ease}
+.password-close:hover{background:rgba(255,0,0,0.2);color:#ff4444}
+.admin-panel{position:fixed;top:0;left:0;width:100%;max-width:420px;height:100vh;background:linear-gradient(180deg,#0f0f1a 0%,#1a0a2e 100%);z-index:1001;transform:translateX(-100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;border-right:1px solid rgba(255,255,255,0.08);box-shadow:10px 0 40px rgba(0,0,0,0.5)}
+.admin-panel.open{transform:translateX(0)}
+.admin-header{padding:25px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:linear-gradient(180deg,#0f0f1a 0%,#0f0f1a 90%,transparent 100%);z-index:10}
+.admin-title{font-size:1.1rem;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:10px}
+.admin-close{width:36px;height:36px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);font-size:1rem;cursor:pointer;transition:all 0.3s ease}
+.admin-close:hover{background:rgba(255,0,0,0.2);color:#ff4444;border-color:rgba(255,0,0,0.3)}
+.admin-body{padding:20px}
+.admin-section{margin-bottom:25px}
+.admin-section-title{font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+.admin-section-title i{color:var(--neon-cyan)}
+.admin-field{margin-bottom:16px}
+.admin-field label{display:block;font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:6px;font-weight:600}
+.admin-field input,.admin-field textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:#fff;font-family:'Cairo','Tajawal',sans-serif;font-size:0.9rem;transition:all 0.3s ease;outline:none}
+.admin-field input:focus,.admin-field textarea:focus{border-color:var(--neon-purple);box-shadow:0 0 15px rgba(139,92,246,0.2);background:rgba(255,255,255,0.06)}
+.admin-field textarea{min-height:80px;resize:vertical;line-height:1.8}
+.admin-btn{width:100%;padding:14px;border:none;border-radius:12px;font-family:'Cairo','Tajawal',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.3s ease;display:flex;align-items:center;justify-content:center;gap:8px}
+.admin-btn-primary{background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));color:#fff;box-shadow:0 4px 20px rgba(139,92,246,0.3)}
+.admin-btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(139,92,246,0.5)}
+.admin-btn-success{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;box-shadow:0 4px 20px rgba(37,211,102,0.3)}
+.admin-btn-success:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(37,211,102,0.5)}
+.admin-btn-danger{background:linear-gradient(135deg,#ff4444,#cc0000);color:#fff;box-shadow:0 4px 20px rgba(255,68,68,0.3)}
+.admin-btn-danger:hover{transform:translateY(-2px);box-shadow:0 6px 25px rgba(255,68,68,0.5)}
+.admin-btn-secondary{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
+.admin-btn-secondary:hover{background:rgba(255,255,255,0.1);color:#fff}
+.admin-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;opacity:0;visibility:hidden;transition:all 0.3s ease;backdrop-filter:blur(5px)}
+.admin-overlay.active{opacity:1;visibility:visible}
+.dynamic-texts-list{margin-top:15px}
+.dynamic-text-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px;margin-bottom:10px;display:flex;align-items:flex-start;gap:10px;transition:all 0.3s ease}
+.dynamic-text-item:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)}
+.dynamic-text-content{flex:1;font-size:0.85rem;color:rgba(255,255,255,0.8);line-height:1.6}
+.dynamic-text-actions{display:flex;gap:6px}
+.dynamic-text-actions button{width:28px;height:28px;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;transition:all 0.2s ease}
+.btn-edit-item{background:rgba(255,215,0,0.15);color:var(--gold)}
+.btn-edit-item:hover{background:rgba(255,215,0,0.3)}
+.btn-delete-item{background:rgba(255,0,0,0.15);color:#ff4444}
+.btn-delete-item:hover{background:rgba(255,0,0,0.3)}
+.admin-tabs{display:flex;gap:8px;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.admin-tab{padding:8px 16px;border-radius:10px;border:none;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.5);font-family:'Cairo','Tajawal',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.3s ease}
+.admin-tab.active{background:linear-gradient(135deg,var(--neon-purple),var(--neon-pink));color:#fff}
+.admin-tab:hover:not(.active){background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8)}
+.admin-tab-content{display:none}
+.admin-tab-content.active{display:block}
+.empty-state{text-align:center;padding:30px 20px;color:rgba(255,255,255,0.3)}
+.empty-state i{font-size:2rem;margin-bottom:10px;display:block}
+.empty-state p{font-size:0.85rem}
+.btn-group{display:flex;gap:10px;margin-top:15px}
+.btn-group .admin-btn{flex:1}
+.success-toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;padding:14px 28px;border-radius:14px;font-weight:700;font-size:0.9rem;z-index:1003;opacity:0;transition:all 0.4s ease;box-shadow:0 10px 30px rgba(37,211,102,0.4);display:flex;align-items:center;gap:10px}
+.success-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader-overlay" id="loader">
-        <div class="loader-logo">AM</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
+
+<div class="loader-overlay" id="loader">
+    <div class="loader-logo">AM Music</div>
+    <div class="loader-bar"><div class="loader-progress"></div></div>
+    <div class="loader-text">LOADING...</div>
+</div>
+
+<div class="bg-container"><div class="bg-gradient"></div><div class="bg-grid"></div></div>
+<div class="particles" id="particles"></div>
+
+<div class="admin-toggle" id="adminToggle" title="لوحة التحكم"><i class="fas fa-cog"></i></div>
+
+<div class="password-modal" id="passwordModal">
+    <div class="password-close" onclick="closePasswordModal()"><i class="fas fa-times"></i></div>
+    <div class="password-box">
+        <div class="password-icon"><i class="fas fa-lock"></i></div>
+        <div class="password-title">لوحة التحكم</div>
+        <div class="password-subtitle">أدخل كلمة المرور للدخول</div>
+        <input type="password" class="password-input" id="passwordInput" placeholder="&#8226;&#8226;&#8226;&#8226;" maxlength="4" onkeydown="if(event.key==='Enter')checkPassword()">
+        <button class="password-btn" id="passwordBtn" onclick="checkPassword()"><i class="fas fa-unlock-alt"></i> فتح</button>
+        <div class="password-error" id="passwordError">كلمة المرور غير صحيحة!</div>
+    </div>
+</div>
+
+<div class="admin-overlay" id="adminOverlay" onclick="toggleAdminPanel()"></div>
+
+<div class="admin-panel" id="adminPanel">
+    <div class="admin-header">
+        <div class="admin-title"><i class="fas fa-sliders-h"></i> لوحة التحكم</div>
+        <div class="admin-close" onclick="toggleAdminPanel()"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="admin-body">
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="switchTab('texts')" data-tab="texts">النصوص</button>
+            <button class="admin-tab" onclick="switchTab('dynamic')" data-tab="dynamic">نصوص جديدة</button>
+            <button class="admin-tab" onclick="switchTab('links')" data-tab="links">الروابط</button>
         </div>
-        <div class="loader-text">جاري التحميل...</div>
-    </div>
 
-    <!-- Background -->
-    <div class="bg-container">
-        <div class="bg-gradient"></div>
-        <div class="bg-grid"></div>
-    </div>
+        <div class="admin-tab-content active" id="tab-texts">
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-heading"></i> عنوان الصفحة</div>
+                <div class="admin-field"><label>عنوان الصفحة (Title)</label><input type="text" id="editPageTitle" value="AM Music Official | فنان موسيقي مستقل"></div>
+                <div class="admin-field"><label>وصف الصفحة (Meta Description)</label><textarea id="editPageDesc">AM Music Official - عالمك الموسيقي الخاص. كتابة وتسجيل أغاني بأسماء الأشخاص والمناسبات الخاصة.</textarea></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-user"></i> معلومات الفنان</div>
+                <div class="admin-field"><label>اسم الفنان</label><input type="text" id="editArtistName" value="AM Music Official"></div>
+                <div class="admin-field"><label>اسم المستخدم</label><input type="text" id="editArtistUsername" value="@ammusicofficial"></div>
+                <div class="admin-field"><label>الوصف / التاق</label><input type="text" id="editArtistTag" value="فنان موسيقي مستقل"></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-id-card"></i> عنوان كرت السيرة</div>
+                <div class="admin-field"><label>عنوان الكرت</label><input type="text" id="editBioCardTitle" value="من أنا"></div>
+                <div class="admin-field"><label>أيقونة الكرت</label><input type="text" id="editBioCardIcon" value="fas fa-user-circle"></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-align-right"></i> السيرة الذاتية</div>
+                <div class="admin-field"><label>النص الأول</label><textarea id="editBio1">مرحباً! أنا AM Music، فنان موسيقي مستقل</textarea></div>
+                <div class="admin-field"><label>النص الثاني</label><textarea id="editBio2">أكتب وأسجل أغاني بأسماء الأشخاص والمناسبات الخاصة</textarea></div>
+                <div class="admin-field"><label>النص الثالث</label><textarea id="editBio3">عالمك الموسيقي الخاص يبدأ من هنا</textarea></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-concierge-bell"></i> عنوان كرت الخدمات</div>
+                <div class="admin-field"><label>عنوان الكرت</label><input type="text" id="editServicesCardTitle" value="خدماتي"></div>
+                <div class="admin-field"><label>أيقونة الكرت</label><input type="text" id="editServicesCardIcon" value="fas fa-star"></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-list"></i> نص الخدمات</div>
+                <div class="admin-field"><label>نص الخدمات (كل سطر = سطر جديد)</label><textarea id="editServices">نقدم خدمات كتابة الأغاني وتسجيلها بأعلى جودة
+مع إمكانية تخصيص الأغنية باسم الشخص أو المناسبة
+تسليم سريع خلال 24 ساعة</textarea></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-chart-bar"></i> الإحصائيات</div>
+                <div class="admin-field"><label>إيموجي/أيقونة 1</label><input type="text" id="editStat1Icon" value="&#127925;"></div>
+                <div class="admin-field"><label>الرقم 1</label><input type="text" id="editStat1Num" value="150+"></div>
+                <div class="admin-field"><label>العنوان 1</label><input type="text" id="editStat1Label" value="أغنية منجزة"></div>
+                <div class="admin-field"><label>إيموجي/أيقونة 2</label><input type="text" id="editStat2Icon" value="&#128522;"></div>
+                <div class="admin-field"><label>الرقم 2</label><input type="text" id="editStat2Num" value="500+"></div>
+                <div class="admin-field"><label>العنوان 2</label><input type="text" id="editStat2Label" value="عميل سعيد"></div>
+                <div class="admin-field"><label>إيموجي/أيقونة 3</label><input type="text" id="editStat3Icon" value="&#9889;"></div>
+                <div class="admin-field"><label>الرقم 3</label><input type="text" id="editStat3Num" value="24h"></div>
+                <div class="admin-field"><label>العنوان 3</label><input type="text" id="editStat3Label" value="تسليم سريع"></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-shoe-prints"></i> تذييل الصفحة</div>
+                <div class="admin-field"><label>نص التذييل</label><input type="text" id="editFooterText" value="صنع بـ &#10084; بواسطة AM Music Official"></div>
+            </div>
+            <button class="admin-btn admin-btn-success" onclick="saveAllChanges()"><i class="fas fa-save"></i> حفظ جميع التغييرات</button>
+        </div>
 
-    <!-- Particles -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Main Content -->
-    <div class="main-container">
-        <!-- Profile Section -->
-        <div class="profile-section reveal">
-            <div class="avatar-wrapper">
-                <div class="avatar-glow"></div>
-                <div class="avatar-border"></div>
-                <div class="avatar">
-                    <i class="fas fa-music"></i>
+        <div class="admin-tab-content" id="tab-dynamic">
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-plus-circle"></i> إضافة نص جديد</div>
+                <div class="admin-field"><label>عنوان النص</label><input type="text" id="newTextTitle" placeholder="مثال: عروض خاصة"></div>
+                <div class="admin-field"><label>محتوى النص</label><textarea id="newTextContent" placeholder="اكتب النص هنا..."></textarea></div>
+                <button class="admin-btn admin-btn-primary" onclick="addDynamicText()"><i class="fas fa-plus"></i> إضافة النص</button>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fas fa-list"></i> النصوص المضافة</div>
+                <div class="dynamic-texts-list" id="dynamicTextsList">
+                    <div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد نصوص مضافة بعد</p></div>
                 </div>
-                <div class="verified-badge">
-                    <i class="fas fa-check"></i>
-                </div>
-            </div>
-            <h1 class="artist-name">AM Music Official</h1>
-            <p class="artist-username">@am.music.official</p>
-            <p class="artist-tag">فنان مستقل | صانع محتوى موسيقي</p>
-
-            <div class="equalizer-container">
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
             </div>
         </div>
 
-        <!-- Bio Card -->
-        <div class="card reveal">
-            <div class="card-title">
-                <i class="fas fa-user-circle"></i>
-                عني
+        <div class="admin-tab-content" id="tab-links">
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fab fa-youtube"></i> رابط يوتيوب</div>
+                <div class="admin-field"><label>رابط القناة</label><input type="text" id="editLinkYoutube" value="https://youtube.com/@ammusicofficial"></div>
+                <div class="admin-field"><label>نص الزر</label><input type="text" id="editLabelYoutube" value="قناتي على يوتيوب"></div>
+                <div class="admin-field"><label>أيقونة الزر</label><input type="text" id="editIconYoutube" value="fab fa-youtube"></div>
             </div>
-            <div class="divider"></div>
-            <p class="bio-line">
-                <span class="highlight">&#10024;&#127756; "عالمك الموسيقي الخاص"</span>
-            </p>
-            <div class="divider"></div>
-            <p class="bio-line">
-                <span class="highlight">&#127926;&#10084;&#65039; "ملخص مشاعرك في أغنية"</span>
-            </p>
-            <div class="divider"></div>
-            <p class="bio-line">
-                <span class="highlight">&#127911; "الموسيقى هي الحياة.. اسمع واستمتع"</span>
-            </p>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fab fa-tiktok"></i> رابط تيك توك</div>
+                <div class="admin-field"><label>رابط الحساب</label><input type="text" id="editLinkTiktok" value="https://tiktok.com/@ammusicofficial"></div>
+                <div class="admin-field"><label>نص الزر</label><input type="text" id="editLabelTiktok" value="حسابي على تيك توك"></div>
+                <div class="admin-field"><label>أيقونة الزر</label><input type="text" id="editIconTiktok" value="fab fa-tiktok"></div>
+            </div>
+            <div class="admin-section">
+                <div class="admin-section-title"><i class="fab fa-whatsapp"></i> رابط واتساب</div>
+                <div class="admin-field"><label>رقم الواتساب</label><input type="text" id="editLinkWhatsapp" value="https://wa.me/966500000000"></div>
+                <div class="admin-field"><label>نص الزر</label><input type="text" id="editLabelWhatsapp" value="تواصل عبر واتساب"></div>
+                <div class="admin-field"><label>أيقونة الزر</label><input type="text" id="editIconWhatsapp" value="fab fa-whatsapp"></div>
+            </div>
+            <button class="admin-btn admin-btn-success" onclick="saveAllChanges()"><i class="fas fa-save"></i> حفظ التغييرات</button>
         </div>
+    </div>
+</div>
 
-        <!-- Services Card -->
-        <div class="card reveal">
-            <div class="card-title">
-                <i class="fas fa-microphone-alt"></i>
-                خدماتي
-            </div>
-            <div class="divider"></div>
-            <p class="services-text">
-                نحوّل <span class="highlight-word">مشاعرك</span> و<span class="highlight-word">أفكارك</span> إلى <span class="highlight-word">أغاني مميزة</span> تُصنع خصيصًا لك.
-                <br><br>
-                نقدم خدمات <span class="highlight-word">كتابة وتسجيل الأغاني</span> بأسماء الأشخاص والمناسبات الخاصة، مع <span class="highlight-word">لمسة إبداعية</span> تجعل كل عمل <span class="highlight-word">فريدًا</span> ويعبر عن <span class="highlight-word">قصتك</span> بطريقة لا تُنسى.
-            </p>
+<div class="success-toast" id="successToast"><i class="fas fa-check-circle"></i><span>تم الحفظ بنجاح!</span></div>
+
+<div class="main-container">
+    <div class="profile-section reveal">
+        <div class="avatar-wrapper">
+            <div class="avatar-glow"></div>
+            <div class="avatar-border"></div>
+            <div class="avatar"><i class="fas fa-music"></i></div>
+            <div class="verified-badge"><i class="fas fa-check"></i></div>
         </div>
-
-        <!-- Stats -->
-        <div class="stats-container reveal">
-            <div class="stat-box">
-                <span class="stat-icon">&#127897;</span>
-                <div class="stat-label">أغاني أصلية</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-icon">&#128293;</span>
-                <div class="stat-label">طاقة إيجابية</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-icon">&#128170;</span>
-                <div class="stat-label">شغل جامد</div>
-            </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="buttons-container reveal">
-            <a href="https://www.youtube.com/@AMMusicOfficial-1" target="_blank" class="btn btn-youtube">
-                <i class="fab fa-youtube btn-icon-main"></i>
-                <span>قناتي على يوتيوب</span>
-                <i class="fas fa-arrow-left btn-icon-arrow"></i>
-            </a>
-
-            <a href="https://www.tiktok.com/@am.music.official?_r=1&_t=ZS-979fndITCS5" target="_blank" class="btn btn-tiktok">
-                <i class="fab fa-tiktok btn-icon-main"></i>
-                <span>حسابي على تيك توك</span>
-                <i class="fas fa-arrow-left btn-icon-arrow"></i>
-            </a>
-
-            <a href="https://wa.me/966551139663" target="_blank" class="btn btn-whatsapp">
-                <i class="fab fa-whatsapp btn-icon-main"></i>
-                <span>تواصل معايا على واتساب</span>
-                <i class="fas fa-comment btn-icon-arrow"></i>
-            </a>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer reveal">
-            <p class="footer-text">
-                AM Music Official <span class="footer-heart">&#10084;</span> 2026
-            </p>
+        <h1 class="artist-name" id="displayArtistName">AM Music Official</h1>
+        <p class="artist-username" id="displayArtistUsername">@ammusicofficial</p>
+        <p class="artist-tag" id="displayArtistTag">فنان موسيقي مستقل</p>
+        <div class="equalizer-container">
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+            <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
         </div>
     </div>
 
-    <script>
-        // ===== LOADING SCREEN =====
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 2500);
-        });
+    <div class="card reveal">
+        <div class="card-title" id="bioCardTitle"><i class="fas fa-user-circle" id="bioCardIcon"></i><span id="bioCardTitleText">من أنا</span></div>
+        <div class="divider"></div>
+        <div id="bioContainer">
+            <p class="bio-line" id="displayBio1">مرحباً! أنا <span class="highlight">AM Music</span>، فنان موسيقي مستقل</p>
+            <p class="bio-line" id="displayBio2">أكتب وأسجل أغاني <span class="highlight">بأسماء الأشخاص</span> والمناسبات الخاصة</p>
+            <p class="bio-line" id="displayBio3">عالمك الموسيقي الخاص يبدأ من هنا</p>
+        </div>
+    </div>
 
-        // ===== PARTICLES =====
-        const particlesContainer = document.getElementById('particles');
-        const particleColors = ['#FFD700', '#FF00FF', '#00FFFF', '#8B5CF6', '#FF6B35'];
-        const particleSizes = [2, 3, 4, 2, 3];
+    <div class="card reveal">
+        <div class="card-title" id="servicesCardTitle"><i class="fas fa-star" id="servicesCardIcon"></i><span id="servicesCardTitleText">خدماتي</span></div>
+        <div class="divider"></div>
+        <div id="servicesContainer">
+            <p class="services-text" id="displayServices">نقدم خدمات <span class="highlight-word">كتابة الأغاني</span> وتسجيلها بأعلى جودة<br>مع إمكانية <span class="highlight-word">تخصيص الأغنية</span> باسم الشخص أو المناسبة<br>تسليم سريع <span class="highlight-word">خلال 24 ساعة</span></p>
+        </div>
+    </div>
 
-        for (let i = 0; i < 40; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            const color = particleColors[Math.floor(Math.random() * particleColors.length)];
-            const size = particleSizes[Math.floor(Math.random() * particleSizes.length)];
-            particle.style.cssText = `
-                left: ${Math.random() * 100}%;
-                width: ${size}px;
-                height: ${size}px;
-                background: ${color};
-                box-shadow: 0 0 ${size * 3}px ${color}, 0 0 ${size * 6}px ${color};
-                animation-duration: ${Math.random() * 5 + 5}s;
-                animation-delay: ${Math.random() * 5}s;
-            `;
-            particlesContainer.appendChild(particle);
-        }
+    <div id="dynamicTextsContainer"></div>
 
-        // ===== SCROLL REVEAL =====
-        const revealElements = document.querySelectorAll('.reveal');
+    <div class="stats-container reveal">
+        <div class="stat-box"><span class="stat-icon" id="displayStat1Icon">&#127925;</span><div class="stat-label" id="displayStat1Num">150+</div><div class="stat-label" id="displayStat1Label">أغنية منجزة</div></div>
+        <div class="stat-box"><span class="stat-icon" id="displayStat2Icon">&#128522;</span><div class="stat-label" id="displayStat2Num">500+</div><div class="stat-label" id="displayStat2Label">عميل سعيد</div></div>
+        <div class="stat-box"><span class="stat-icon" id="displayStat3Icon">&#9889;</span><div class="stat-label" id="displayStat3Num">24h</div><div class="stat-label" id="displayStat3Label">تسليم سريع</div></div>
+    </div>
 
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('active');
-                    }, index * 150);
+    <div class="buttons-container reveal">
+        <a href="https://youtube.com/@ammusicofficial" class="btn btn-youtube" id="btnYoutube" target="_blank" rel="noopener"><i class="fab fa-youtube btn-icon-main" id="iconYoutube"></i><span id="labelYoutube">قناتي على يوتيوب</span><i class="fas fa-arrow-left btn-icon-arrow"></i></a>
+        <a href="https://tiktok.com/@ammusicofficial" class="btn btn-tiktok" id="btnTiktok" target="_blank" rel="noopener"><i class="fab fa-tiktok btn-icon-main" id="iconTiktok"></i><span id="labelTiktok">حسابي على تيك توك</span><i class="fas fa-arrow-left btn-icon-arrow"></i></a>
+        <a href="https://wa.me/966500000000" class="btn btn-whatsapp" id="btnWhatsapp" target="_blank" rel="noopener"><i class="fab fa-whatsapp btn-icon-main" id="iconWhatsapp"></i><span id="labelWhatsapp">تواصل عبر واتساب</span><i class="fas fa-arrow-left btn-icon-arrow"></i></a>
+    </div>
+
+    <div class="footer reveal">
+        <p class="footer-text" id="displayFooterText">صنع بـ <span class="footer-heart">&#10084;</span> بواسطة AM Music Official</p>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyB0r6tsQN4CJ-0ALShJiH0G_IHR0f_Mo5E",
+    authDomain: "amam-965b0.firebaseapp.com",
+    projectId: "amam-965b0",
+    storageBucket: "amam-965b0.firebasestorage.app",
+    messagingSenderId: "900838483690",
+    appId: "1:900838483690:web:4c786786bf6ce15420d993",
+    measurementId: "G-B0J4V7YTDE"
+};
+
+var db = null;
+var isFirebaseReady = false;
+var dynamicTexts = [];
+const PASSWORD = '1997';
+
+try {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    console.log('Firebase initialized');
+} catch(e) {
+    console.error('Firebase init error:', e);
+}
+
+window.addEventListener('load', function() {
+    setTimeout(function() { 
+        var loader = document.getElementById('loader');
+        if(loader) loader.classList.add('hidden'); 
+    }, 2000);
+});
+
+function createParticles() {
+    var container = document.getElementById('particles');
+    if(!container) return;
+    var colors = ['#FFD700', '#FF00FF', '#00FFFF', '#8B5CF6'];
+    for (var i = 0; i < 30; i++) {
+        var p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(p);
+    }
+}
+createParticles();
+
+function revealOnScroll() {
+    document.querySelectorAll('.reveal').forEach(function(el) {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100) el.classList.add('active');
+    });
+}
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+
+document.querySelectorAll('.btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+        var ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        var rect = this.getBoundingClientRect();
+        var size = Math.max(rect.width, rect.height);
+        ripple.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (e.clientX - rect.left - size/2) + 'px;top:' + (e.clientY - rect.top - size/2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(function() { ripple.remove(); }, 600);
+    });
+});
+
+function showPasswordModal() {
+    var modal = document.getElementById('passwordModal');
+    var input = document.getElementById('passwordInput');
+    var error = document.getElementById('passwordError');
+    if(modal) modal.classList.add('active');
+    if(input) { input.value = ''; setTimeout(function() { input.focus(); }, 300); }
+    if(error) error.classList.remove('show');
+}
+
+function closePasswordModal() {
+    var modal = document.getElementById('passwordModal');
+    var input = document.getElementById('passwordInput');
+    var error = document.getElementById('passwordError');
+    if(modal) modal.classList.remove('active');
+    if(input) input.value = '';
+    if(error) error.classList.remove('show');
+}
+
+function checkPassword() {
+    var input = document.getElementById('passwordInput');
+    var error = document.getElementById('passwordError');
+    if(!input) return;
+    if (input.value === PASSWORD) {
+        closePasswordModal();
+        toggleAdminPanel();
+    } else {
+        if(error) error.classList.add('show');
+        input.value = '';
+        setTimeout(function() { input.focus(); }, 100);
+    }
+}
+
+function toggleAdminPanel() {
+    var panel = document.getElementById('adminPanel');
+    var overlay = document.getElementById('adminOverlay');
+    if(panel) panel.classList.toggle('open');
+    if(overlay) overlay.classList.toggle('active');
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.admin-tab').forEach(function(t) {
+        t.classList.toggle('active', t.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.admin-tab-content').forEach(function(c) {
+        c.classList.toggle('active', c.id === 'tab-' + tabName);
+    });
+}
+
+function showToast(msg) {
+    var toast = document.getElementById('successToast');
+    if(!toast) return;
+    var span = toast.querySelector('span');
+    if(span) span.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2500);
+}
+
+function saveToLocal(key, data) {
+    try {
+        localStorage.setItem('ammusic_' + key, JSON.stringify(data));
+        return true;
+    } catch(e) {
+        console.error('LocalStorage error:', e);
+        return false;
+    }
+}
+
+function loadFromLocal(key) {
+    try {
+        var item = localStorage.getItem('ammusic_' + key);
+        return item ? JSON.parse(item) : null;
+    } catch(e) {
+        console.error('LocalStorage read error:', e);
+        return null;
+    }
+}
+
+function initFirebase() {
+    if(!db) {
+        console.log('Firebase DB not available, using localStorage');
+        loadFromLocalStorage();
+        return;
+    }
+
+    db.collection('siteData').doc('main').get()
+        .then(function(doc) {
+            if (doc.exists) {
+                var data = doc.data();
+                applyMainData(data);
+                updateAdminFields(data);
+                saveToLocal('siteData', data);
+            } else {
+                var localData = loadFromLocal('siteData');
+                if(localData) {
+                    applyMainData(localData);
+                    updateAdminFields(localData);
                 }
-            });
-        }, { threshold: 0.1 });
-
-        revealElements.forEach(el => revealObserver.observe(el));
-
-        // Trigger first element immediately
-        setTimeout(() => {
-            revealElements[0]?.classList.add('active');
-        }, 2800);
-
-        // ===== RIPPLE EFFECT =====
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                ripple.className = 'ripple';
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                ripple.style.cssText = `
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${e.clientX - rect.left - size/2}px;
-                    top: ${e.clientY - rect.top - size/2}px;
-                `;
-                this.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-            });
+            }
+            isFirebaseReady = true;
+        })
+        .catch(function(err) { 
+            console.error('Firebase load error:', err); 
+            var localData = loadFromLocal('siteData');
+            if(localData) {
+                applyMainData(localData);
+                updateAdminFields(localData);
+            }
+            isFirebaseReady = true;
         });
 
-        // ===== CONSOLE EASTER EGG =====
-        console.log('%c AM Music Official ', 
-            'background: linear-gradient(135deg, #FFD700, #FF00FF, #00FFFF); color: #000; font-size: 24px; font-weight: 900; padding: 12px 24px; border-radius: 12px; text-shadow: none;');
-        console.log('%c &#128293; خلّينا نعمل حاجة تاريخية! &#128293; ', 
-            'color: #FFD700; font-size: 16px; font-weight: 700;');
-    </script>
+    db.collection('dynamicTexts').orderBy('createdAt', 'desc').get()
+        .then(function(snapshot) {
+            dynamicTexts = [];
+            snapshot.forEach(function(doc) { 
+                var d = doc.data();
+                d.id = doc.id;
+                dynamicTexts.push(d); 
+            });
+            renderDynamicTexts();
+            renderDynamicTextsOnPage();
+            saveToLocal('dynamicTexts', dynamicTexts);
+        })
+        .catch(function(err) { 
+            console.error('Dynamic texts load error:', err);
+            var localDyn = loadFromLocal('dynamicTexts');
+            if(localDyn) {
+                dynamicTexts = localDyn;
+                renderDynamicTexts();
+                renderDynamicTextsOnPage();
+            }
+        });
+}
+
+function loadFromLocalStorage() {
+    var data = loadFromLocal('siteData');
+    if(data) {
+        applyMainData(data);
+        updateAdminFields(data);
+    }
+    var dyn = loadFromLocal('dynamicTexts');
+    if(dyn) {
+        dynamicTexts = dyn;
+        renderDynamicTexts();
+        renderDynamicTextsOnPage();
+    }
+}
+
+function applyMainData(data) {
+    if(!data) return;
+    if (data.pageTitle) document.title = data.pageTitle;
+    if (data.artistName) { var el = document.getElementById('displayArtistName'); if(el) el.textContent = data.artistName; }
+    if (data.artistUsername) { var el = document.getElementById('displayArtistUsername'); if(el) el.textContent = data.artistUsername; }
+    if (data.artistTag) { var el = document.getElementById('displayArtistTag'); if(el) el.textContent = data.artistTag; }
+    if (data.bioCardTitle) { var el = document.getElementById('bioCardTitleText'); if(el) el.textContent = data.bioCardTitle; }
+    if (data.bioCardIcon) { var el = document.getElementById('bioCardIcon'); if(el) el.className = data.bioCardIcon; }
+    if (data.bio1) { var el = document.getElementById('displayBio1'); if(el) el.innerHTML = data.bio1.replace(/\n/g, '<br>'); }
+    if (data.bio2) { var el = document.getElementById('displayBio2'); if(el) el.innerHTML = data.bio2.replace(/\n/g, '<br>'); }
+    if (data.bio3) { var el = document.getElementById('displayBio3'); if(el) el.innerHTML = data.bio3.replace(/\n/g, '<br>'); }
+    if (data.servicesCardTitle) { var el = document.getElementById('servicesCardTitleText'); if(el) el.textContent = data.servicesCardTitle; }
+    if (data.servicesCardIcon) { var el = document.getElementById('servicesCardIcon'); if(el) el.className = data.servicesCardIcon; }
+    if (data.services) { var el = document.getElementById('displayServices'); if(el) el.innerHTML = data.services.replace(/\n/g, '<br>'); }
+    if (data.stat1Icon) { var el = document.getElementById('displayStat1Icon'); if(el) el.innerHTML = data.stat1Icon; }
+    if (data.stat1Num) { var el = document.getElementById('displayStat1Num'); if(el) el.textContent = data.stat1Num; }
+    if (data.stat1Label) { var el = document.getElementById('displayStat1Label'); if(el) el.textContent = data.stat1Label; }
+    if (data.stat2Icon) { var el = document.getElementById('displayStat2Icon'); if(el) el.innerHTML = data.stat2Icon; }
+    if (data.stat2Num) { var el = document.getElementById('displayStat2Num'); if(el) el.textContent = data.stat2Num; }
+    if (data.stat2Label) { var el = document.getElementById('displayStat2Label'); if(el) el.textContent = data.stat2Label; }
+    if (data.stat3Icon) { var el = document.getElementById('displayStat3Icon'); if(el) el.innerHTML = data.stat3Icon; }
+    if (data.stat3Num) { var el = document.getElementById('displayStat3Num'); if(el) el.textContent = data.stat3Num; }
+    if (data.stat3Label) { var el = document.getElementById('displayStat3Label'); if(el) el.textContent = data.stat3Label; }
+    if (data.footerText) { var el = document.getElementById('displayFooterText'); if(el) el.innerHTML = data.footerText; }
+    if (data.linkYoutube) { var el = document.getElementById('btnYoutube'); if(el) el.href = data.linkYoutube; }
+    if (data.labelYoutube) { var el = document.getElementById('labelYoutube'); if(el) el.textContent = data.labelYoutube; }
+    if (data.iconYoutube) { var el = document.getElementById('iconYoutube'); if(el) el.className = data.iconYoutube + ' btn-icon-main'; }
+    if (data.linkTiktok) { var el = document.getElementById('btnTiktok'); if(el) el.href = data.linkTiktok; }
+    if (data.labelTiktok) { var el = document.getElementById('labelTiktok'); if(el) el.textContent = data.labelTiktok; }
+    if (data.iconTiktok) { var el = document.getElementById('iconTiktok'); if(el) el.className = data.iconTiktok + ' btn-icon-main'; }
+    if (data.linkWhatsapp) { var el = document.getElementById('btnWhatsapp'); if(el) el.href = data.linkWhatsapp; }
+    if (data.labelWhatsapp) { var el = document.getElementById('labelWhatsapp'); if(el) el.textContent = data.labelWhatsapp; }
+    if (data.iconWhatsapp) { var el = document.getElementById('iconWhatsapp'); if(el) el.className = data.iconWhatsapp + ' btn-icon-main'; }
+}
+
+function updateAdminFields(data) {
+    if(!data) return;
+    function setVal(id, val) {
+        var el = document.getElementById(id);
+        if(el && val !== undefined) el.value = val;
+    }
+    setVal('editPageTitle', data.pageTitle);
+    setVal('editPageDesc', data.pageDesc);
+    setVal('editArtistName', data.artistName);
+    setVal('editArtistUsername', data.artistUsername);
+    setVal('editArtistTag', data.artistTag);
+    setVal('editBioCardTitle', data.bioCardTitle);
+    setVal('editBioCardIcon', data.bioCardIcon);
+    setVal('editBio1', data.bio1);
+    setVal('editBio2', data.bio2);
+    setVal('editBio3', data.bio3);
+    setVal('editServicesCardTitle', data.servicesCardTitle);
+    setVal('editServicesCardIcon', data.servicesCardIcon);
+    setVal('editServices', data.services);
+    setVal('editStat1Icon', data.stat1Icon);
+    setVal('editStat1Num', data.stat1Num);
+    setVal('editStat1Label', data.stat1Label);
+    setVal('editStat2Icon', data.stat2Icon);
+    setVal('editStat2Num', data.stat2Num);
+    setVal('editStat2Label', data.stat2Label);
+    setVal('editStat3Icon', data.stat3Icon);
+    setVal('editStat3Num', data.stat3Num);
+    setVal('editStat3Label', data.stat3Label);
+    setVal('editFooterText', data.footerText);
+    setVal('editLinkYoutube', data.linkYoutube);
+    setVal('editLabelYoutube', data.labelYoutube);
+    setVal('editIconYoutube', data.iconYoutube);
+    setVal('editLinkTiktok', data.linkTiktok);
+    setVal('editLabelTiktok', data.labelTiktok);
+    setVal('editIconTiktok', data.iconTiktok);
+    setVal('editLinkWhatsapp', data.linkWhatsapp);
+    setVal('editLabelWhatsapp', data.labelWhatsapp);
+    setVal('editIconWhatsapp', data.iconWhatsapp);
+}
+
+function saveAllChanges() {
+    var data = {
+        pageTitle: document.getElementById('editPageTitle').value,
+        pageDesc: document.getElementById('editPageDesc').value,
+        artistName: document.getElementById('editArtistName').value,
+        artistUsername: document.getElementById('editArtistUsername').value,
+        artistTag: document.getElementById('editArtistTag').value,
+        bioCardTitle: document.getElementById('editBioCardTitle').value,
+        bioCardIcon: document.getElementById('editBioCardIcon').value,
+        bio1: document.getElementById('editBio1').value,
+        bio2: document.getElementById('editBio2').value,
+        bio3: document.getElementById('editBio3').value,
+        servicesCardTitle: document.getElementById('editServicesCardTitle').value,
+        servicesCardIcon: document.getElementById('editServicesCardIcon').value,
+        services: document.getElementById('editServices').value,
+        stat1Icon: document.getElementById('editStat1Icon').value,
+        stat1Num: document.getElementById('editStat1Num').value,
+        stat1Label: document.getElementById('editStat1Label').value,
+        stat2Icon: document.getElementById('editStat2Icon').value,
+        stat2Num: document.getElementById('editStat2Num').value,
+        stat2Label: document.getElementById('editStat2Label').value,
+        stat3Icon: document.getElementById('editStat3Icon').value,
+        stat3Num: document.getElementById('editStat3Num').value,
+        stat3Label: document.getElementById('editStat3Label').value,
+        footerText: document.getElementById('editFooterText').value,
+        linkYoutube: document.getElementById('editLinkYoutube').value,
+        labelYoutube: document.getElementById('editLabelYoutube').value,
+        iconYoutube: document.getElementById('editIconYoutube').value,
+        linkTiktok: document.getElementById('editLinkTiktok').value,
+        labelTiktok: document.getElementById('editLabelTiktok').value,
+        iconTiktok: document.getElementById('editIconTiktok').value,
+        linkWhatsapp: document.getElementById('editLinkWhatsapp').value,
+        labelWhatsapp: document.getElementById('editLabelWhatsapp').value,
+        iconWhatsapp: document.getElementById('editIconWhatsapp').value
+    };
+
+    saveToLocal('siteData', data);
+    applyMainData(data);
+
+    if (db && isFirebaseReady) {
+        data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+        db.collection('siteData').doc('main').set(data)
+            .then(function() { showToast('تم الحفظ بنجاح!'); })
+            .catch(function(err) { console.error('Firebase save error:', err); showToast('تم الحفظ محلياً'); });
+    } else {
+        showToast('تم الحفظ محلياً!');
+    }
+}
+
+function addDynamicText() {
+    var title = document.getElementById('newTextTitle').value.trim();
+    var content = document.getElementById('newTextContent').value.trim();
+    if (!title || !content) { showToast('يرجى ملء جميع الحقول'); return; }
+
+    var newText = {
+        id: 'local_' + Date.now(),
+        title: title, 
+        content: content,
+        createdAt: new Date().toISOString()
+    };
+
+    dynamicTexts.unshift(newText);
+    document.getElementById('newTextTitle').value = '';
+    document.getElementById('newTextContent').value = '';
+    renderDynamicTexts(); 
+    renderDynamicTextsOnPage(); 
+    saveToLocal('dynamicTexts', dynamicTexts);
+
+    if (db && isFirebaseReady) {
+        db.collection('dynamicTexts').add({
+            title: title, 
+            content: content,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(function(docRef) {
+            newText.id = docRef.id;
+            saveToLocal('dynamicTexts', dynamicTexts);
+            showToast('تمت الإضافة!');
+        })
+        .catch(function(err) { console.error('Firebase add error:', err); showToast('تمت الإضافة محلياً'); });
+    } else {
+        showToast('تمت الإضافة محلياً!');
+    }
+}
+
+function deleteDynamicText(id) {
+    if(!confirm('هل أنت متأكد من الحذف؟')) return;
+
+    dynamicTexts = dynamicTexts.filter(function(t) { return t.id !== id; });
+    renderDynamicTexts(); 
+    renderDynamicTextsOnPage(); 
+    saveToLocal('dynamicTexts', dynamicTexts);
+
+    if (db && isFirebaseReady && !id.startsWith('local_')) {
+        db.collection('dynamicTexts').doc(id).delete()
+            .then(function() { showToast('تم الحذف!'); })
+            .catch(function(err) { console.error('Delete error:', err); showToast('تم الحذف محلياً'); });
+    } else {
+        showToast('تم الحذف!');
+    }
+}
+
+function editDynamicText(id) {
+    var text = dynamicTexts.find(function(t) { return t.id === id; });
+    if (!text) return;
+    var newTitle = prompt('عنوان النص:', text.title);
+    if (newTitle === null) return;
+    var newContent = prompt('محتوى النص:', text.content);
+    if (newContent === null) return;
+
+    text.title = newTitle.trim() || text.title;
+    text.content = newContent.trim() || text.content;
+    text.updatedAt = new Date().toISOString();
+
+    renderDynamicTexts(); 
+    renderDynamicTextsOnPage(); 
+    saveToLocal('dynamicTexts', dynamicTexts);
+
+    if (db && isFirebaseReady && !id.startsWith('local_')) {
+        db.collection('dynamicTexts').doc(id).update({
+            title: text.title,
+            content: text.content,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(function() { showToast('تم التعديل!'); })
+        .catch(function(err) { console.error('Edit error:', err); showToast('تم التعديل محلياً'); });
+    } else {
+        showToast('تم التعديل!');
+    }
+}
+
+function renderDynamicTexts() {
+    var list = document.getElementById('dynamicTextsList');
+    if(!list) return;
+    if (dynamicTexts.length === 0) {
+        list.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>لا توجد نصوص مضافة بعد</p></div>';
+        return;
+    }
+    list.innerHTML = dynamicTexts.map(function(t) {
+        return '<div class="dynamic-text-item"><div class="dynamic-text-content"><strong style="color:var(--gold);display:block;margin-bottom:4px">' + esc(t.title) + '</strong>' + esc(t.content) + '</div><div class="dynamic-text-actions"><button class="btn-edit-item" onclick="editDynamicText(&#39;' + t.id + '&#39;)" title="تعديل"><i class="fas fa-pen"></i></button><button class="btn-delete-item" onclick="deleteDynamicText(&#39;' + t.id + '&#39;)" title="حذف"><i class="fas fa-trash"></i></button></div></div>';
+    }).join('');
+}
+
+function renderDynamicTextsOnPage() {
+    var container = document.getElementById('dynamicTextsContainer');
+    if(!container) return;
+    if (dynamicTexts.length === 0) { container.innerHTML = ''; return; }
+    container.innerHTML = dynamicTexts.map(function(t) {
+        return '<div class="card reveal active"><div class="card-title"><i class="fas fa-quote-right"></i>' + esc(t.title) + '</div><div class="divider"></div><p class="bio-line">' + esc(t.content).replace(/\n/g, '<br>') + '</p></div>';
+    }).join('');
+}
+
+function esc(text) {
+    if(!text) return '';
+    var d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initFirebase();
+
+    var adminToggle = document.getElementById('adminToggle');
+    if (adminToggle) {
+        adminToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            showPasswordModal();
+        });
+        adminToggle.addEventListener('touchend', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            showPasswordModal();
+        });
+    }
+
+    var passwordBtn = document.getElementById('passwordBtn');
+    if (passwordBtn) {
+        passwordBtn.addEventListener('click', checkPassword);
+    }
+
+    console.log('AM Music app initialized');
+});
+</script>
 </body>
 </html>
